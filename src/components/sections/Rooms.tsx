@@ -49,20 +49,20 @@ const rooms = [
     },
     {
         id: 5,
-        title: 'ЛАЗЕРНИЙ ТИР',
-        desc: 'Перевірка на влучність та реакцію. Безпечні лазерні технології та динамічні мішені створюють атмосферу справжнього бойовика.',
-        time: '5 хвилин',
-        age: '7+ років',
-        players: 'до 2 гравців',
+        title: 'ІНТЕРАКТИВНА СТІНА',
+        desc: 'Ця зона перетворює стрільбу на справжнє інтерактивне змагання. Візьми пістолет, націлься та влучай в ціль — драйв гарантовано!',
+        time: '2-3 хвилини',
+        age: '3+ років',
+        players: '1-6 гравців',
         image: '/images/room-laser.jpg'
     },
     {
         id: 6,
-        title: 'DANCE BATTLE',
-        desc: 'Танцювальний батл під найпопулярніші хіти. Повторюй рухи за аватаром на екрані та заробляй бали за точність виконання.',
-        time: '3-4 хвилини',
-        age: '4+ років',
-        players: 'до 4 гравців',
+        title: 'ФІШКИ ПРОСТОРУ',
+        desc: 'Не обмежуйтесь однією грою — у нас десятки форматів, що подарують новий досвід. Кожен візит — нові враження, адже ми постійно розширюємо колекцію ігор.',
+        time: 'скільки хочете',
+        age: '3+ років',
+        players: 'довільна к-сть',
         image: '/images/room-dance.jpg'
     }
 ];
@@ -130,7 +130,9 @@ export const Rooms = () => {
                                 <SwiperSlide key={room.id} className={styles.rooms__slide}>
                                     <div className={styles.rooms__card}>
                                         <div className={styles.rooms__imageWrapper}>
-                                            <div className={styles.rooms__placeholder} />
+                                            {/* Тут можна використовувати Next Image, якщо зображення є */}
+                                            {/* <Image src={room.image} alt={room.title} fill className={styles.rooms__image} /> */}
+                                            <div className={styles.rooms__placeholder} style={{ backgroundImage: `url(${room.image})`, backgroundSize: 'cover' }} />
                                         </div>
                                         
                                         <div className={styles.rooms__content}>

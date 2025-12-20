@@ -30,6 +30,15 @@ export const Hero = () => {
         setParticles(generatedParticles);
     }, []);
 
+    // Функція плавного скролу до бронювання
+    const handleScrollToBooking = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        const elem = document.getElementById('booking');
+        if (elem) {
+            elem.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <section className={styles.hero}>
             <div className={styles.hero__particles}>
@@ -58,12 +67,17 @@ export const Hero = () => {
             <div className={styles.hero__bottom}>
                 <Reveal animation="fade-up" delay={0.6}>
                     <div className={styles.hero__action}>
-                        <button className={styles.hero__button} type="button">
+                        {/* Змінено на тег <a> з обробником кліку */}
+                        <a 
+                            href="#booking" 
+                            className={styles.hero__button} 
+                            onClick={handleScrollToBooking}
+                        >
                             <span className={styles.hero__bracket}>[</span>
-                            <span className={styles.hero__btnText} >ВИБРАТИ МІСТО</span>
+                            <span className={styles.hero__btnText}>ВИБРАТИ МІСТО</span>
                             <span className={styles.hero__bracket}>]</span>
                             <div className={styles.hero__glow} />
-                        </button>
+                        </a>
                     </div>
                 </Reveal>
 

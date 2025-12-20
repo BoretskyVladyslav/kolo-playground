@@ -127,6 +127,8 @@
         cursor: pointer;
         padding: 15px 30px;
         @include flex-center;
+        display: inline-flex; // Важливо для тегу <a>
+        text-decoration: none; // Прибираємо підкреслення
         gap: 10px;
         transition: transform $transition-fast;
 
