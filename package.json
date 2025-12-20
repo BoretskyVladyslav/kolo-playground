@@ -1,0 +1,27 @@
+{
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.3",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-datepicker": "^6.2.0",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.562.0",
+    "next": "^16.1.0",
+    "react": "^19.2.3",
+    "react-datepicker": "^9.1.0",
+    "react-dom": "^19.2.3",
+    "sass": "^1.97.0",
+    "swiper": "^12.0.3"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  }
+}

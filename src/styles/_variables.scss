@@ -1,0 +1,26 @@
+$color-bg: #020b26;
+$color-surface: #0a1435;
+$color-text: #ffffff;
+
+$color-accent: #d4ff00;
+$color-green: #d4ff00;
+$color-pink: #e6007e;
+$color-blue-accent: #3b4cca;
+$color-border: rgba(255, 255, 255, 0.1);
+
+$font-main: var(--font-inter), sans-serif;
+
+$container-width: 1440px;
+$gutter: 20px;
+
+$bp-mobile: 480px;
+$bp-tablet: 768px;
+$bp-desktop: 1024px;
+
+$z-negative: -1;
+$z-default: 1;
+$z-overlay: 100;
+$z-modal: 1000;
+
+$transition-base: 0.3s ease-in-out;
+$transition-fast: 0.15s ease;

@@ -1,0 +1,109 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.faq {
+    background: linear-gradient(180deg, #99005e 0%, #020b26 100%);
+    padding: 100px 0;
+    color: #fff;
+
+    &__container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 $gutter;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        position: relative;
+        margin-bottom: 60px;
+    }
+
+    &__title {
+        font-size: clamp(40px, 5vw, 64px);
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    &__index {
+        position: absolute;
+        right: 0;
+        top: 5px;
+        font-family: monospace;
+        font-size: 18px;
+        opacity: 0.5;
+    }
+
+    &__list {
+        border-top: 1px solid $color-green;
+    }
+
+    &__item {
+        border-bottom: 1px solid $color-green;
+        cursor: pointer;
+        transition: background-color $transition-fast;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        &--open {
+            .faq__icon {
+                transform: rotate(45deg);
+                color: $color-green;
+            }
+
+            .faq__answerWrapper {
+                grid-template-rows: 1fr;
+                opacity: 1;
+                padding-bottom: 25px;
+            }
+        }
+    }
+
+    &__questionRow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 0;
+        gap: 20px;
+    }
+
+    &__question {
+        font-size: 20px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin: 0;
+        line-height: 1.2;
+        
+        @include mobile {
+            font-size: 16px;
+        }
+    }
+
+    &__icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s;
+        color: #fff;
+    }
+
+    &__answerWrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding-bottom 0.4s;
+        opacity: 0;
+    }
+
+    &__answerInner {
+        overflow: hidden;
+        font-size: 16px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9);
+        white-space: pre-line;
+    }
+}

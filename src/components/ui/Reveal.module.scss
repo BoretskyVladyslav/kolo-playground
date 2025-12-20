@@ -1,0 +1,30 @@
+@use "../../styles/variables" as *;
+
+.reveal {
+    opacity: 0;
+    will-change: opacity, transform;
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); // Ease-out-cubic
+
+    &--visible {
+        opacity: 1;
+        transform: none !important;
+        filter: blur(0) !important;
+    }
+
+    &--fade-up {
+        transform: translateY(40px);
+    }
+
+    &--slide-in {
+        transform: translateX(-30px);
+    }
+
+    &--scale {
+        transform: scale(0.95);
+    }
+    
+    &--blur {
+        filter: blur(10px);
+        transform: scale(1.05);
+    }
+}

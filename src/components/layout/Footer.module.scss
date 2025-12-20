@@ -1,0 +1,262 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.footer {
+    background-color: #020b26;
+    color: #fff;
+    padding: 100px 0 50px;
+    font-size: 16px;
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+
+    // Градієнтна лінія зверху
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, $color-green 50%, transparent 100%);
+        opacity: 0.5;
+    }
+
+    // Фонове світіння
+    &__bgGlow {
+        position: absolute;
+        bottom: -20%;
+        left: -10%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba($color-pink, 0.15) 0%, transparent 70%);
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    &__container {
+        max-width: $container-width;
+        margin: 0 auto;
+        padding: 0 $gutter;
+    }
+
+    &__top {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        gap: 60px;
+        margin-bottom: 60px;
+        
+        @include mobile {
+            grid-template-columns: 1fr;
+            gap: 50px;
+            text-align: center;
+        }
+    }
+
+    &__col {
+        &--end {
+            display: flex;
+            justify-content: flex-end;
+            @include mobile { justify-content: center; }
+        }
+    }
+
+    // Логотип
+    &__logo {
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        @include mobile { justify-content: center; }
+    }
+
+    &__logoMain {
+        font-weight: 900;
+        font-size: 28px;
+        color: $color-pink;
+        text-shadow: 0 0 15px rgba($color-pink, 0.4);
+    }
+
+    &__logoSub {
+        font-weight: 900;
+        font-size: 28px;
+        color: $color-green;
+        text-shadow: 0 0 15px rgba($color-green, 0.4);
+    }
+
+    // Текстові блоки
+    &__block {
+        margin-bottom: 20px;
+        line-height: 1.6;
+        p { margin: 0; opacity: 0.9; }
+    }
+
+    &__label {
+        display: block;
+        color: $color-green;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        opacity: 0.8;
+    }
+
+    // Контакти
+    &__contacts {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__address {
+        max-width: 250px;
+        @include mobile { margin: 0 auto; }
+    }
+
+    &__contactLinks {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__link {
+        color: #fff;
+        font-weight: 500;
+        text-decoration: none;
+        transition: 0.3s;
+        width: fit-content;
+        
+        @include mobile { margin: 0 auto; }
+
+        &:hover {
+            color: $color-green;
+            text-shadow: 0 0 10px rgba($color-green, 0.5);
+            transform: translateX(5px);
+        }
+    }
+
+    // Навігація
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-end;
+        @include mobile { align-items: center; }
+    }
+
+    &__navLink {
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 600;
+        text-transform: uppercase;
+        text-decoration: none;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        position: relative;
+
+        &:hover {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+            padding-right: 10px; // Зсув вліво при наведенні
+            
+            &::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 50%;
+                width: 6px;
+                height: 6px;
+                background: $color-green;
+                border-radius: 50%;
+                transform: translateY(-50%);
+                box-shadow: 0 0 8px $color-green;
+            }
+        }
+    }
+
+    // Розділювач
+    &__divider {
+        width: 100%;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        margin-bottom: 40px;
+    }
+
+    // Нижній ряд
+    &__bottom {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 1fr;
+        align-items: end;
+        gap: 40px;
+        
+        @include mobile {
+            grid-template-columns: 1fr;
+            align-items: center;
+            gap: 30px;
+            text-align: center;
+        }
+    }
+
+    &__copyright {
+        font-size: 13px;
+        opacity: 0.5;
+        line-height: 1.6;
+    }
+
+    &__designer {
+        color: $color-green;
+        opacity: 0.8;
+    }
+
+    // Соцмережі
+    &__socials {
+        display: flex;
+        gap: 15px;
+        @include mobile { justify-content: center; }
+    }
+
+    &__socialBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #fff;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &:hover {
+            background: $color-green;
+            color: #000;
+            border-color: $color-green;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px rgba($color-green, 0.3);
+        }
+    }
+
+    // Документи
+    &__legal {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        @include mobile { align-items: center; }
+
+        a {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: lowercase;
+            text-decoration: none;
+            transition: 0.3s;
+            
+            &:hover {
+                color: $color-green;
+                text-decoration: underline;
+            }
+        }
+    }
+}
