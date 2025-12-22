@@ -11,16 +11,22 @@ import styles from './Booking.module.scss';
 registerLocale('uk', uk);
 
 const START_HOUR = 11;
-const END_HOUR = 21;
+const END_HOUR = 20; 
+const MAX_CAPACITY = 15;
+
+const MOCK_BOOKED_SLOTS: Record<string, number> = {
+  '12:00': 10,
+  '14:30': 5,
+  '17:00': 12,
+  '19:00': 2,
+};
 
 export const Booking = () => {
   const [isClient, setIsClient] = useState(false);
-
   const [city, setCity] = useState('Київ');
-  const [guests, setGuests] = useState('3');
+  const [guests, setGuests] = useState('2'); 
   const [date, setDate] = useState<Date | null>(new Date());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -30,15 +36,26 @@ export const Booking = () => {
 
   const timeSlots = useMemo(() => {
     const slots: string[] = [];
-    for (let hour = START_HOUR; hour < END_HOUR; hour++) {
+    for (let hour = START_HOUR; hour <= END_HOUR; hour++) {
       slots.push(`${hour}:00`);
-      slots.push(`${hour}:30`);
+if (hour !== END_HOUR) {
+  slots.push(`${hour}:30`);
+}
     }
     return slots;
   }, []);
 
+  const getSlotInfo = (time: string) => {
+    const bookedCount = MOCK_BOOKED_SLOTS[time] || 0; 
+    const available = MAX_CAPACITY - bookedCount;
+    return { available, bookedCount };
+  };
+
   const isTimeDisabled = (time: string) => {
     if (!date) return true;
+    
+    const { available } = getSlotInfo(time);
+    if (available < parseInt(guests)) return true;
 
     const now = new Date();
     const isToday =
@@ -126,153 +143,207 @@ export const Booking = () => {
           </div>
         </div>
 
+        <Reveal animation="fade-up" delay={0.1}>
+            <div className={styles.booking__infoBanner}>
+                <div className={styles.infoItem}>
+                    <div className={styles.iconCircle}>
+                        <Clock size={24} color="#000" />
+                    </div>
+                    <div className={styles.infoText}>
+                        <span className={styles.label}>ТРИВАЛІСТЬ</span>
+                        <span className={styles.value}>120 хв</span>
+                    </div>
+                </div>
+                
+                <div className={styles.divider} />
+
+                <div className={styles.infoItem}>
+                    <div className={styles.iconCircle}>
+                        <Banknote size={24} color="#000" />
+                    </div>
+                    <div className={styles.infoText}>
+                        <span className={styles.label}>ВАРТІСТЬ</span>
+                        <span className={styles.value}>400 грн</span>
+                        <span className={styles.sub}>/ за особу</span>
+                    </div>
+                </div>
+
+                <div className={styles.divider} />
+
+                <div className={styles.infoItem}>
+                    <div className={styles.iconCircle}>
+                        <Users size={24} color="#000" />
+                    </div>
+                    <div className={styles.infoText}>
+                        <span className={styles.label}>КОМПАНІЯ</span>
+                        <span className={styles.value}>2–6 осіб</span>
+                        <span className={styles.sub}>на одну зону</span>
+                    </div>
+                </div>
+            </div>
+        </Reveal>
+
         <Reveal animation="fade-up" delay={0.2}>
-          <div className={styles.booking__interface}>
-            {!isSubmitted ? (
-              <>
-                <div className={styles.booking__controls}>
-                  <div className={styles.booking__controlGroup}>
-                    <label>Місто</label>
-                    <div className={styles.selectWrapper}>
-                      <MapPin size={18} className={styles.icon} />
-                      <select value={city} onChange={e => setCity(e.target.value)}>
-                        <option value="Київ">Київ</option>
-                      </select>
-                      <ChevronDown size={16} className={styles.arrow} />
+          <div className={styles.booking__interfaceWrapper}>
+            <div className={styles.booking__interface}>
+              {!isSubmitted ? (
+                <>
+                  <div className={styles.booking__filters}>
+                    <div className={styles.filterGroup}>
+                      <label>МІСТО</label>
+                      <div className={styles.selectWrapper}>
+                        <MapPin size={18} className={styles.icon} />
+                        <select value={city} onChange={e => setCity(e.target.value)}>
+                          <option value="Київ">Київ</option>
+                        </select>
+                        <ChevronDown size={16} className={styles.arrow} />
+                      </div>
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                      <label>ЛЮДЕЙ</label>
+                      <div className={styles.selectWrapper}>
+                        <Users size={18} className={styles.icon} />
+                        <select value={guests} onChange={e => {
+                          setGuests(e.target.value);
+                          setSelectedTime(null); 
+                        }}>
+                          {Array.from({ length: 14 }, (_, i) => i + 2).map(num => (
+                            <option key={num} value={num}>
+                              {num}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={16} className={styles.arrow} />
+                      </div>
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                      <label>ДАТА</label>
+                      <div className={styles.dateWrapper}>
+                        <Calendar size={18} className={styles.icon} />
+                        <DatePicker
+                          selected={date}
+                          onChange={(d: Date | null) => {
+                            setDate(d);
+                            setSelectedTime(null);
+                          }}
+                          dateFormat="dd.MM.yyyy"
+                          minDate={new Date()}
+                          locale="uk"
+                        />
+                        <ChevronDown size={16} className={styles.arrow} />
+                      </div>
                     </div>
                   </div>
 
-                  <div className={styles.booking__controlGroup}>
-                    <label>Людей</label>
-                    <div className={styles.selectWrapper}>
-                      <Users size={18} className={styles.icon} />
-                      <select value={guests} onChange={e => setGuests(e.target.value)}>
-                        {Array.from({ length: 15 }, (_, i) => i + 1).map(num => (
-                          <option key={num} value={num}>
-                            {num}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown size={16} className={styles.arrow} />
-                    </div>
+                  <div className={styles.booking__slots}>
+                    {timeSlots.map(time => {
+                      const { available } = getSlotInfo(time);
+                      return (
+                        <button
+                          key={time}
+                          disabled={isTimeDisabled(time)}
+                          onClick={() => setSelectedTime(time)}
+                          className={`${styles.slotBtn} ${
+                            selectedTime === time ? styles.active : ''
+                          }`}
+                        >
+                          <span className={styles.time}>{time}</span>
+                          <span className={styles.seats}>
+                            вільно: {available}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
 
-                  <div className={styles.booking__controlGroup}>
-                    <label>Дата</label>
-                    <div className={styles.dateWrapper}>
-                      <Calendar size={18} className={styles.icon} />
-                      <DatePicker
-                        selected={date}
-                        onChange={(d: Date | null) => {
-                          setDate(d);
-                          setSelectedTime(null);
-                        }}
-                        dateFormat="dd.MM.yyyy"
-                        minDate={new Date()}
-                        locale="uk"
-                      />
-                      <ChevronDown size={16} className={styles.arrow} />
+                  {selectedTime && (
+                    <div className={styles.booking__formContainer}>
+                      <div className={styles.booking__summary}>
+                        <h3>Ваше бронювання</h3>
+                        <ul className={styles.summaryList}>
+                          <li>
+                            <span>Місто:</span> {city}
+                          </li>
+                          <li>
+                            <span>Дата:</span> {formattedDate}
+                          </li>
+                          <li>
+                            <span>Час:</span> {selectedTime}
+                          </li>
+                          <li>
+                            <span>Людей:</span> {guests}
+                          </li>
+                          <li className={styles.highlight}>
+                            <span>Тривалість:</span> 120 хв
+                          </li>
+                          <li className={styles.highlight}>
+                            <span>До сплати:</span> <span className={styles.price}>{Number(guests) * 400} грн</span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <form onSubmit={handleSubmit} className={styles.booking__form}>
+                        <div className={styles.inputGroup}>
+                          <input
+                            type="text"
+                            name="name"
+                            placeholder=" "
+                            required
+                            value={formData.name}
+                            onChange={handleInputChange}
+                          />
+                          <label>Ваше повне ім'я</label>
+                        </div>
+
+                        <div className={styles.inputGroup}>
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder=" "
+                            required
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                          />
+                          <label>Номер телефону</label>
+                        </div>
+
+                        <div className={styles.inputGroup}>
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder=" "
+                            required
+                            value={formData.email}
+                            onChange={handleInputChange}
+                          />
+                          <label>Email</label>
+                        </div>
+
+                        <button type="submit" className={styles.submitBtn}>
+                          ПІДТВЕРДИТИ БРОНЮВАННЯ
+                        </button>
+                      </form>
                     </div>
-                  </div>
+                  )}
+                </>
+              ) : (
+                <div className={styles.booking__success}>
+                  <CheckCircle size={80} className={styles.successIcon} />
+                  <h3>ДЯКУЄМО!</h3>
+                  <p>
+                    Ваше бронювання на {date?.toLocaleDateString()} о {selectedTime} прийнято.
+                  </p>
+                  <button
+                    onClick={() => setIsSubmitted(false)}
+                    className={styles.resetBtn}
+                  >
+                    Забронювати ще
+                  </button>
                 </div>
-
-                <div className={styles.booking__slots}>
-                  {timeSlots.map(time => (
-                    <button
-                      key={time}
-                      disabled={isTimeDisabled(time)}
-                      onClick={() => setSelectedTime(time)}
-                      className={`${styles.slotBtn} ${
-                        selectedTime === time ? styles.active : ''
-                      }`}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-
-                {selectedTime && (
-                  <div className={styles.booking__formContainer}>
-                    <div className={styles.booking__summary}>
-                      <h3>Ваше бронювання</h3>
-                      <ul className={styles.summaryList}>
-                        <li>
-                          <span>Місто:</span> {city}
-                        </li>
-                        <li>
-                          <span>Дата:</span> {formattedDate}
-                        </li>
-                        <li>
-                          <span>Час:</span> {selectedTime}
-                        </li>
-                        <li>
-                          <span>Людей:</span> {guests}
-                        </li>
-                        <li className={styles.highlight}>
-                          <span>Тривалість:</span> 120 хв
-                        </li>
-                        <li className={styles.highlight}>
-                          <span>До сплати:</span> {Number(guests) * 400} грн
-                        </li>
-                      </ul>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className={styles.booking__form}>
-                      <div className={styles.inputGroup}>
-                        <input
-                          type="text"
-                          name="name"
-                          required
-                          value={formData.name}
-                          onChange={handleInputChange}
-                        />
-                        <label>Ваше повне ім'я</label>
-                      </div>
-
-                      <div className={styles.inputGroup}>
-                        <input
-                          type="tel"
-                          name="phone"
-                          required
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                        />
-                        <label>Номер телефону</label>
-                      </div>
-
-                      <div className={styles.inputGroup}>
-                        <input
-                          type="email"
-                          name="email"
-                          required
-                          value={formData.email}
-                          onChange={handleInputChange}
-                        />
-                        <label>Email</label>
-                      </div>
-
-                      <button type="submit" className={styles.submitBtn}>
-                        ПІДТВЕРДИТИ БРОНЮВАННЯ
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className={styles.booking__success}>
-                <CheckCircle size={80} className={styles.successIcon} />
-                <h3>ДЯКУЄМО!</h3>
-                <p>
-                  Ваше бронювання на {date?.toLocaleDateString()} о {selectedTime} прийнято.
-                </p>
-                <button
-                  onClick={() => setIsSubmitted(false)}
-                  className={styles.resetBtn}
-                >
-                  Забронювати ще
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </Reveal>
       </div>
