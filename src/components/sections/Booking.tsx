@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { uk } from 'date-fns/locale/uk';
 import { ChevronDown, Calendar, CheckCircle, MapPin, Users, Clock, Banknote } from 'lucide-react';
 import { Reveal } from '../ui/Reveal';
+import { supabase } from '@/lib/supabase';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './Booking.module.scss';
 
@@ -13,20 +14,25 @@ registerLocale('uk', uk);
 const START_HOUR = 11;
 const END_HOUR = 20; 
 const MAX_CAPACITY = 15;
+const VISIT_DURATION = 120; 
 
-const MOCK_BOOKED_SLOTS: Record<string, number> = {
-  '12:00': 10,
-  '14:30': 5,
-  '17:00': 12,
-  '19:00': 2,
+type TimeSlot = {
+  time: string;
+  available: boolean;
+  remaining: number;
 };
 
 export const Booking = () => {
   const [isClient, setIsClient] = useState(false);
-  const [city, setCity] = useState('Київ');
+  const [loading, setLoading] = useState(false);
+  
+  const [city, setCity] = useState('1'); 
   const [guests, setGuests] = useState('2'); 
   const [date, setDate] = useState<Date | null>(new Date());
+  
+  const [slots, setSlots] = useState<TimeSlot[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -34,52 +40,144 @@ export const Booking = () => {
     setIsClient(true);
   }, []);
 
-  const timeSlots = useMemo(() => {
-    const slots: string[] = [];
-    for (let hour = START_HOUR; hour <= END_HOUR; hour++) {
-      slots.push(`${hour}:00`);
-if (hour !== END_HOUR) {
-  slots.push(`${hour}:30`);
-}
-    }
-    return slots;
-  }, []);
-
-  const getSlotInfo = (time: string) => {
-    const bookedCount = MOCK_BOOKED_SLOTS[time] || 0; 
-    const available = MAX_CAPACITY - bookedCount;
-    return { available, bookedCount };
+  const getMinutesFromMidnight = (timeStr: string) => {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
   };
 
-  const isTimeDisabled = (time: string) => {
-    if (!date) return true;
-    
-    const { available } = getSlotInfo(time);
-    if (available < parseInt(guests)) return true;
+  const fetchAvailableSlots = useCallback(async () => {
+    if (!date) return;
+    setLoading(true);
 
-    const now = new Date();
-    const isToday =
-      date.getDate() === now.getDate() &&
-      date.getMonth() === now.getMonth() &&
-      date.getFullYear() === now.getFullYear();
+    try {
+      const dateStr = date.toLocaleDateString('en-CA');
+      
+      const { data: bookings, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('city_id', city)
+        .eq('date', dateStr);
 
-    if (!isToday) return false;
+      if (error) throw error;
 
-    const [hours, minutes] = time.split(':').map(Number);
-    const slotTime = new Date(now);
-    slotTime.setHours(hours, minutes, 0, 0);
+      const generatedSlots: TimeSlot[] = [];
+      const now = new Date();
+      const isToday = date.getDate() === now.getDate() && 
+                      date.getMonth() === now.getMonth() && 
+                      date.getFullYear() === now.getFullYear();
+      
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-    return slotTime < new Date(now.getTime() + 30 * 60000);
+      for (let hour = START_HOUR; hour <= END_HOUR; hour++) {
+        const minutesArr = hour === END_HOUR ? [0] : [0, 30];
+
+        for (let minute of minutesArr) {
+          const timeStr = `${hour}:${minute === 0 ? '00' : '30'}`;
+          const slotStartMinutes = hour * 60 + minute;
+          const slotEndMinutes = slotStartMinutes + VISIT_DURATION;
+
+          if (isToday && slotStartMinutes < currentMinutes + 30) {
+             continue; 
+          }
+
+          let maxOccupancy = 0;
+
+          for (let checkTime = slotStartMinutes; checkTime < slotEndMinutes; checkTime += 30) {
+            let currentOccupancyAtPoint = 0;
+
+            bookings?.forEach((b) => {
+               const bStart = getMinutesFromMidnight(b.start_time);
+               // Simple handling if end_time is stored. Assuming booking duration is standard or calculated from end_time
+               // Ideally, calculate end minutes based on end_time string
+               const bEnd = getMinutesFromMidnight(b.end_time); 
+
+               if (checkTime >= bStart && checkTime < bEnd) {
+                 currentOccupancyAtPoint += b.number_of_people;
+               }
+            });
+            
+            if (currentOccupancyAtPoint > maxOccupancy) {
+                maxOccupancy = currentOccupancyAtPoint;
+            }
+          }
+
+          const guestsNum = parseInt(guests);
+          const remaining = MAX_CAPACITY - maxOccupancy;
+          const available = (maxOccupancy + guestsNum) <= MAX_CAPACITY;
+
+          generatedSlots.push({
+            time: timeStr,
+            available,
+            remaining: remaining < 0 ? 0 : remaining
+          });
+        }
+      }
+      setSlots(generatedSlots);
+
+    } catch (err) {
+      console.error('Error loading slots:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [date, city, guests]);
+
+  useEffect(() => {
+    fetchAvailableSlots();
+    setSelectedTime(null);
+  }, [fetchAvailableSlots]);
+
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!date || !selectedTime) return;
+
+    const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, "");
+    if(cleanPhone.length < 10) {
+        alert("Будь ласка, введіть коректний номер телефону");
+        return;
+    }
+
+    try {
+      const dateStr = date.toLocaleDateString('en-CA');
+      
+      const [h, m] = selectedTime.split(':').map(Number);
+      const startMinutes = h * 60 + m;
+      const endMinutes = startMinutes + VISIT_DURATION;
+      
+      const endH = Math.floor(endMinutes / 60);
+      const endM = endMinutes % 60;
+      const endTimeStr = `${endH}:${endM === 0 ? '00' : '30'}`;
+
+      const newBooking = {
+        city_id: parseInt(city),
+        date: dateStr,
+        start_time: selectedTime,
+        end_time: endTimeStr, 
+        number_of_people: parseInt(guests),
+        customer_name: formData.name,
+        customer_phone: formData.phone,
+        customer_email: formData.email,
+        created_at: new Date().toISOString()
+      };
+
+      const { error } = await supabase
+        .from('bookings')
+        .insert([newBooking]);
+
+      if (error) throw error;
+
+      setIsSubmitted(true);
+      fetchAvailableSlots();
+
+    } catch (error: any) {
+      console.error('Error creating booking:', error);
+      alert('Помилка бронювання: ' + error.message);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
   };
 
   const formattedDate = date
@@ -194,7 +292,7 @@ if (hour !== END_HOUR) {
                       <div className={styles.selectWrapper}>
                         <MapPin size={18} className={styles.icon} />
                         <select value={city} onChange={e => setCity(e.target.value)}>
-                          <option value="Київ">Київ</option>
+                          <option value="1">Київ</option>
                         </select>
                         <ChevronDown size={16} className={styles.arrow} />
                       </div>
@@ -238,24 +336,31 @@ if (hour !== END_HOUR) {
                   </div>
 
                   <div className={styles.booking__slots}>
-                    {timeSlots.map(time => {
-                      const { available } = getSlotInfo(time);
-                      return (
-                        <button
-                          key={time}
-                          disabled={isTimeDisabled(time)}
-                          onClick={() => setSelectedTime(time)}
-                          className={`${styles.slotBtn} ${
-                            selectedTime === time ? styles.active : ''
-                          }`}
-                        >
-                          <span className={styles.time}>{time}</span>
-                          <span className={styles.seats}>
-                            вільно: {available}
-                          </span>
-                        </button>
-                      );
-                    })}
+                    {loading ? (
+                       <div style={{color: 'white', gridColumn: '1/-1', textAlign: 'center'}}>Завантаження слотів...</div>
+                    ) : slots.length > 0 ? (
+                        slots.map(slot => (
+                            <button
+                            key={slot.time}
+                            disabled={!slot.available}
+                            onClick={() => setSelectedTime(slot.time)}
+                            className={`${styles.slotBtn} ${
+                                selectedTime === slot.time ? styles.active : ''
+                            }`}
+                            >
+                            <span className={styles.time}>{slot.time}</span>
+                            <span className={styles.seats} style={{
+                                color: slot.available ? 'rgba(255,255,255,0.6)' : '#ff4444'
+                            }}>
+                                {slot.available 
+                                    ? `Вільно: ${slot.remaining}` 
+                                    : 'Місць немає'}
+                            </span>
+                            </button>
+                        ))
+                    ) : (
+                        <div style={{color: 'white', gridColumn: '1/-1', textAlign: 'center'}}>На цю дату немає доступних слотів</div>
+                    )}
                   </div>
 
                   {selectedTime && (
@@ -264,7 +369,7 @@ if (hour !== END_HOUR) {
                         <h3>Ваше бронювання</h3>
                         <ul className={styles.summaryList}>
                           <li>
-                            <span>Місто:</span> {city}
+                            <span>Місто:</span> {city === '1' ? 'Київ' : 'Інше'}
                           </li>
                           <li>
                             <span>Дата:</span> {formattedDate}
@@ -305,6 +410,7 @@ if (hour !== END_HOUR) {
                             required
                             value={formData.phone}
                             onChange={handleInputChange}
+                            title="Введіть телефон, наприклад 0501234567"
                           />
                           <label>Номер телефону</label>
                         </div>
@@ -336,7 +442,10 @@ if (hour !== END_HOUR) {
                     Ваше бронювання на {date?.toLocaleDateString()} о {selectedTime} прийнято.
                   </p>
                   <button
-                    onClick={() => setIsSubmitted(false)}
+                    onClick={() => {
+                        setIsSubmitted(false);
+                        fetchAvailableSlots();
+                    }}
                     className={styles.resetBtn}
                   >
                     Забронювати ще
