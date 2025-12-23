@@ -136,6 +136,7 @@
         transition: all $transition-base;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
+        position: relative; // Важливо для позиціонування оверлею
 
         &:hover {
             border-color: rgba($color-green, 0.5);
@@ -245,6 +246,151 @@
 
         &:active {
             transform: scale(0.98);
+        }
+    }
+
+    // === OVERLAY STYLES ===
+    &__overlay {
+        position: absolute;
+        inset: 0; // Top, right, bottom, left = 0
+        background: #0d1b40; // Суцільний фон, щоб перекрити все
+        z-index: 20; // Вище ніж контент картки
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: all 0.3s ease-in-out;
+        
+        &.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    }
+
+    &__overlayHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        flex-shrink: 0;
+    }
+
+    &__overlayTitle {
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: $color-accent;
+        padding-right: 10px;
+        line-height: 1.2;
+    }
+
+    &__closeBtn {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        padding: 0;
+        transition: color 0.3s;
+        
+        &:hover {
+            color: $color-accent;
+        }
+    }
+
+    &__overlayScroll {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding-right: 5px;
+        margin-bottom: 15px;
+        
+        // Стилізація скролбару
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba($color-accent, 0.3);
+            border-radius: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+    }
+
+    &__overlayText {
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+
+        .intro {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .gameplay {
+            margin: 15px 0;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .section {
+            margin-bottom: 15px;
+
+            h4 {
+                font-size: 14px;
+                font-weight: 700;
+                color: $color-green;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+
+                li {
+                    position: relative;
+                    padding-left: 15px;
+                    margin-bottom: 6px;
+                    font-size: 13px;
+
+                    &::before {
+                        content: '•';
+                        color: $color-accent;
+                        position: absolute;
+                        left: 0;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
+    &__overlayFooter {
+        flex-shrink: 0;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    &__bookBtn {
+        width: 100%;
+        padding: 14px 0;
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #000;
+        background: $color-accent;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba($color-accent, 0.3);
         }
     }
 }
