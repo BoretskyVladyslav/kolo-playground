@@ -33,12 +33,8 @@
         top: 5px;
         font-family: monospace;
         font-size: 18px;
-        opacity: 0.5;
-        
-        @include mobile {
-            position: relative;
-            margin-left: 10px;
-        }
+        color: #d4ff00;
+        opacity: 1;
     }
 
     &__list {

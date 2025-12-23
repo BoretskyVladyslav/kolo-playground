@@ -60,7 +60,7 @@ const rooms = [
         desc: 'Спробуй сховатися і перемогти. Збирайте бали, уникаючи небезпеки.',
         time: '3-5 хвилин',
         age: '6+ років',
-        players: 'до 6 гравців',
+        players: 'до 10 гравців',
         image: '/images/rooms__hiding-game.jpg',
         details: {
             intro: "На стінах розташовані кнопки, а над ними – фігури монстрів-охоронців.",
@@ -82,7 +82,7 @@ const rooms = [
         desc: 'Тренуй швидкість та точність. Ця зона перетворює кидки на справжнє змагання.',
         time: '2-4 хвилини',
         age: '5+ років',
-        players: 'до 4 гравців',
+        players: 'до 10 гравців',
         image: '/images/rooms__basketball-game.jpg',
         details: {
             intro: "Кільця засвічуються в певній динаміці і послідовності, залежно від рівня гри.",
@@ -199,7 +199,7 @@ export const Rooms = () => {
                             }}
                             spaceBetween={20}
                             slidesPerView={1.2}
-                            loop={false} // Вимкнули loop, щоб не було проблем зі станом оверлею на дубльованих слайдах
+                            loop={false} 
                             speed={800}
                             grabCursor={true}
                             breakpoints={{

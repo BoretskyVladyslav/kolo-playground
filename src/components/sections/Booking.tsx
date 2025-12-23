@@ -284,19 +284,6 @@ export const Booking = () => {
                                 <span className={styles.sub}>/ за особу</span>
                             </div>
                         </div>
-
-                        <div className={styles.divider} />
-
-                        <div className={styles.infoItem}>
-                            <div className={styles.iconCircle}>
-                                <Users size={24} color="#000" />
-                            </div>
-                            <div className={styles.infoText}>
-                                <span className={styles.label}>КОМПАНІЯ</span>
-                                <span className={styles.value}>2–6 осіб</span>
-                                <span className={styles.sub}>на одну зону</span>
-                            </div>
-                        </div>
                     </div>
                 </Reveal>
 

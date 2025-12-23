@@ -145,7 +145,8 @@ $color-neon: #d4ff00;
 
     &__infoBanner {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 80px;
         align-items: center;
         background: rgba(10, 20, 50, 0.6);
         border: 1px solid rgba(255, 255, 255, 0.2);
@@ -169,6 +170,13 @@ $color-neon: #d4ff00;
             display: flex;
             align-items: center;
             gap: 15px;
+            flex: 1;
+            justify-content: center;
+
+            @include mobile {
+                justify-content: flex-start;
+                width: 100%;
+            }
         }
 
         .iconCircle {

@@ -36,7 +36,8 @@
         top: 10px;
         font-family: monospace;
         font-size: 18px;
-        opacity: 0.5;
+        color: #d4ff00;
+        opacity: 1;
         
         @include mobile {
             position: relative;
@@ -138,10 +139,16 @@
         text-transform: lowercase;
         cursor: pointer;
         transition: 0.3s;
+        border-radius: 4px;
         
         &:hover {
             background: lighten(#8bae18, 5%);
             box-shadow: 0 0 15px rgba(#8bae18, 0.4);
+            transform: translateY(-2px);
+        }
+
+        &:active {
+            transform: scale(0.98);
         }
     }
 
