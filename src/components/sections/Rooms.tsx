@@ -154,7 +154,6 @@ export const Rooms = () => {
     return (
         <section id="rooms" className={styles.rooms}>
             <div className={styles.rooms__container}>
-                <span className={styles.rooms__index} aria-hidden="true">[3]</span>
                 
                 <div className={styles.rooms__header}>
                     <div className={styles.rooms__headerLeft}>

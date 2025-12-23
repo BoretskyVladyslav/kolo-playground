@@ -28,7 +28,6 @@ export const Franchising = () => {
                     <Reveal animation="fade-up">
                         <h2 className={styles.franchising__title}>ФРАНЧАЙЗИНГ</h2>
                     </Reveal>
-                    <span className={styles.franchising__index} aria-hidden="true">[7]</span>
                 </div>
 
                 <div className={styles.franchising__content}>

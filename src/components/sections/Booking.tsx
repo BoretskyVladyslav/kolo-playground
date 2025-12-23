@@ -212,7 +212,6 @@ export const Booking = () => {
                     <Reveal animation="fade-up">
                         <h2 className={styles.booking__title}>ЗАПИС ОНЛАЙН</h2>
                     </Reveal>
-                    <span className={styles.booking__index}>[6]</span>
                 </div>
 
                 <div className={styles.booking__intro}>

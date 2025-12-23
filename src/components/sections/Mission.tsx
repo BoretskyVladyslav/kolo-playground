@@ -36,7 +36,6 @@ export const Mission = () => {
                             KOLO, ЩОБ:
                         </h2>
                     </Reveal>
-                    <span className={styles.mission__index} aria-hidden="true">[2]</span>
                 </div>
 
                 <div className={styles.mission__grid}>

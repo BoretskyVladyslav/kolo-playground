@@ -45,7 +45,6 @@ export const Birthdays = () => {
                     <Reveal animation="fade-up">
                         <h2 className={styles.birthdays__title}>ДНІ НАРОДЖЕННЯ</h2>
                     </Reveal>
-                    <span className={styles.birthdays__index} aria-hidden="true">[5]</span>
                 </div>
 
                 <div className={styles.birthdays__content}>

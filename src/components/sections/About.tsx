@@ -39,8 +39,6 @@ export const About = () => {
                 <Reveal animation="fade-up">
                     <h2 className={styles.about__title}>ПРО НАС</h2>
                 </Reveal>
-                
-                <span className={styles.about__index} aria-hidden="true">[1]</span>
 
                 <div className={styles.about__content}>
                     <div className={styles.about__sidebar}>

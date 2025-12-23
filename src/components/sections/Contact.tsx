@@ -10,7 +10,6 @@ export const Contact = () => {
             <div className={styles.contact__glow} />
 
             <div className={styles.contact__container}>
-                <span className={styles.contact__index} aria-hidden="true">[4]</span>
 
                 <div className={styles.contact__grid}>
                     <div className={styles.contact__sidebar}>
