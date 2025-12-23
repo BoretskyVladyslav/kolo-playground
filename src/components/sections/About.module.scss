@@ -2,213 +2,288 @@
 @use "../../styles/mixins" as *;
 
 @keyframes floatStar {
-	0%, 100% { transform: translateY(0) rotate(10deg); }
-	50% { transform: translateY(-20px) rotate(-5deg); }
+    0%, 100% { transform: translateY(0) rotate(10deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
 }
 
 .about {
-	position: relative;
-	padding: 180px 0;
-	background: transparent;
-	color: $color-text;
-	overflow: hidden;
+    position: relative;
+    padding: 180px 0;
+    background: transparent;
+    color: $color-text;
+    overflow: hidden;
 
-	&__blur {
-		position: absolute;
-		width: 600px;
-		height: 600px;
-		filter: blur(120px);
-		border-radius: 50%;
-		opacity: 0.15;
-		pointer-events: none;
-		z-index: 0;
+    @include mobile {
+        padding: 80px 0;
+    }
 
-		&--green {
-			top: 10%;
-			left: -10%;
-			background: $color-green;
-		}
+    &__blur {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        filter: blur(120px);
+        border-radius: 50%;
+        opacity: 0.15;
+        pointer-events: none;
+        z-index: 0;
+        transform: translate3d(0, 0, 0);
 
-		&--pink {
-			bottom: 5%;
-			right: -5%;
-			background: $color-accent;
-		}
+        @include mobile {
+            width: 300px;
+            height: 300px;
+            filter: blur(60px);
+        }
 
-		&--blue {
-			top: 40%;
-			left: 30%;
-			background: #3b4cca;
-		}
-	}
+        &--green {
+            top: 10%;
+            left: -10%;
+            background: $color-green;
+        }
 
-	&__container {
-		max-width: $container-width;
-		margin: 0 auto;
-		padding: 0 $gutter;
-		position: relative;
-		z-index: 2;
-	}
+        &--pink {
+            bottom: 5%;
+            right: -5%;
+            background: $color-accent;
+        }
 
-	&__title {
-		font-size: clamp(64px, 10vw, 120px);
-		font-weight: 900;
-		text-transform: uppercase;
-		letter-spacing: 4px;
-		line-height: 0.9;
-		margin-bottom: 100px;
-		text-align: left;
-	}
+        &--blue {
+            top: 40%;
+            left: 30%;
+            background: #3b4cca;
+        }
+    }
 
-	&__index {
-		position: absolute;
-		right: $gutter;
-		top: 0;
-		font-size: 18px;
-		font-weight: 700;
-		opacity: 0.4;
-		color: $color-accent;
+    &__container {
+        max-width: $container-width;
+        margin: 0 auto;
+        padding: 0 $gutter;
+        position: relative;
+        z-index: 2;
+    }
 
-		@include mobile {
-			display: none;
-		}
-	}
+    &__title {
+        font-size: clamp(48px, 10vw, 120px);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        line-height: 0.9;
+        margin-bottom: 100px;
+        text-align: left;
+        
+        @include mobile {
+            margin-bottom: 40px;
+        }
+    }
 
-	&__content {
-		display: grid;
-		grid-template-columns: 1fr 1.2fr;
-		gap: 100px;
+    &__index {
+        position: absolute;
+        right: $gutter;
+        top: 0;
+        font-size: 18px;
+        font-weight: 700;
+        opacity: 0.4;
+        color: $color-accent;
+        font-family: monospace;
 
-		@include mobile {
-			grid-template-columns: 1fr;
-			gap: 60px;
-		}
-	}
+        @include mobile {
+            display: none;
+        }
+    }
 
-	&__sidebar {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 100px;
 
-	&__slogan {
-		font-size: clamp(24px, 3vw, 36px);
-		line-height: 1.1;
-		font-weight: 800;
-		text-transform: uppercase;
-		color: $color-text;
-	}
+        @include tablet {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
 
-	&__starWrapper {
-		margin-top: 100px;
-		display: flex;
-		justify-content: flex-start;
+        @include mobile {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+    }
 
-		@include mobile {
-			margin-top: 40px;
-			justify-content: center;
-		}
-	}
+    &__sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-	&__star {
-		// Оновлені стилі для картинки-зірки
-		width: 140px;
-		height: 140px;
-		object-fit: contain;
-		animation: floatStar 8s ease-in-out infinite;
-		// Світіння для 3D ефекту
-		filter: drop-shadow(0 0 30px rgba($color-green, 0.4));
-	}
+    &__slogan {
+        font-size: clamp(24px, 3vw, 36px);
+        line-height: 1.1;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: $color-text;
+    }
 
-	&__main {
-		display: flex;
-		flex-direction: column;
-		gap: 40px;
-	}
+    &__starWrapper {
+        margin-top: 100px;
+        display: flex;
+        justify-content: flex-start;
 
-	&__lead {
-		font-size: 22px;
-		line-height: 1.5;
-		font-weight: 500;
-		max-width: 600px;
-		color: rgba($color-text, 0.9);
-	}
+        @include tablet {
+            display: none;
+        }
 
-	&__visual {
-		position: relative;
-		width: 100%;
-		aspect-ratio: 16 / 9;
-		margin: 40px 0;
-		overflow: visible;
+        @include mobile {
+            display: none;
+        }
+    }
 
-		@include mobile {
-			aspect-ratio: 16 / 10;
-		}
-	}
+    &__star {
+        width: 140px;
+        height: 140px;
+        object-fit: contain;
+        animation: floatStar 8s ease-in-out infinite;
+        filter: drop-shadow(0 0 30px rgba($color-green, 0.4));
+        will-change: transform;
+    }
 
-	&__imageWrapper {
-		position: absolute;
-		inset: 0;
-		opacity: 0;
-		transition: opacity 1.2s ease-in-out;
-		z-index: 1;
-		border-radius: 4px;
-		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+    &__main {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
 
-		&.active {
-			opacity: 1;
-			z-index: 2;
-		}
-	}
+        @include mobile {
+            gap: 30px;
+        }
+    }
 
-	&__image {
-		object-fit: cover;
-	}
+    &__lead {
+        font-size: clamp(16px, 2vw, 22px);
+        line-height: 1.5;
+        font-weight: 500;
+        max-width: 600px;
+        color: rgba($color-text, 0.9);
+    }
 
-	&__bracket {
-		position: absolute;
-		width: 50px;
-		height: 50px;
-		border: 2px solid $color-accent;
-		z-index: 5;
-		filter: drop-shadow(0 0 5px rgba($color-accent, 0.5));
+    &__visual {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        margin: 20px 0;
+        overflow: visible;
+        border-radius: 4px;
 
-		&--top {
-			top: -15px;
-			left: -15px;
-			border-right: none;
-			border-bottom: none;
-		}
+        @include tablet {
+            overflow: hidden;
+        }
 
-		&--bottom {
-			bottom: -15px;
-			right: -15px;
-			border-left: none;
-			border-top: none;
-		}
+        @include mobile {
+            overflow: hidden;
+            aspect-ratio: 16 / 10;
+            margin: 10px 0;
+        }
+    }
 
-		@include mobile {
-			width: 30px;
-			height: 30px;
-			top: -10px;
-			left: -10px;
-			&--bottom {
-				bottom: -10px;
-				right: -10px;
-			}
-		}
-	}
+    &__imageWrapper {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1.2s ease-in-out;
+        z-index: 1;
+        will-change: opacity;
+        border-radius: 4px;
+        overflow: hidden;
 
-	&__footer {
-		border-top: 1px solid rgba(255, 255, 255, 0.1);
-		padding-top: 30px;
-	}
+        &.active {
+            opacity: 1;
+            z-index: 2;
+        }
+        
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.2));
+            z-index: 2;
+        }
+    }
 
-	&__description {
-		font-size: 16px;
-		line-height: 1.6;
-		color: rgba($color-text, 0.6);
-		max-width: 500px;
-	}
+    &__image {
+        object-fit: cover;
+    }
+
+    &__bracket {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border: 2px solid $color-accent;
+        z-index: 5;
+        filter: drop-shadow(0 0 5px rgba($color-accent, 0.5));
+        pointer-events: none;
+        transition: all $transition-base;
+
+        &--top {
+            top: -15px;
+            left: -15px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        &--bottom {
+            bottom: -15px;
+            right: -15px;
+            border-left: none;
+            border-top: none;
+        }
+
+        @include tablet {
+            width: 20px;
+            height: 20px;
+            border-width: 2px;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+
+            &--top {
+                top: 15px;
+                left: 15px;
+            }
+
+            &--bottom {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @include mobile {
+            width: 20px;
+            height: 20px;
+            border-width: 2px;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+
+            &--top {
+                top: 15px;
+                left: 15px;
+            }
+
+            &--bottom {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    }
+
+    &__footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 30px;
+        
+        @include mobile {
+            padding-top: 20px;
+        }
+    }
+
+    &__description {
+        font-size: 16px;
+        line-height: 1.6;
+        color: rgba($color-text, 0.6);
+        max-width: 500px;
+        
+        @include mobile {
+            font-size: 14px;
+        }
+    }
 }

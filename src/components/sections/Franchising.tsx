@@ -28,7 +28,7 @@ export const Franchising = () => {
                     <Reveal animation="fade-up">
                         <h2 className={styles.franchising__title}>ФРАНЧАЙЗИНГ</h2>
                     </Reveal>
-                    <span className={styles.franchising__index}>[7]</span>
+                    <span className={styles.franchising__index} aria-hidden="true">[7]</span>
                 </div>
 
                 <div className={styles.franchising__content}>
@@ -60,6 +60,7 @@ export const Franchising = () => {
                                         value={formData.name}
                                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                                         required
+                                        autoComplete="name"
                                     />
                                     <label className={styles.franchising__label}>ваше ім'я:</label>
                                 </div>
@@ -74,6 +75,7 @@ export const Franchising = () => {
                                         value={formData.email}
                                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                                         required
+                                        autoComplete="email"
                                     />
                                     <label className={styles.franchising__label}>email:</label>
                                 </div>
@@ -87,6 +89,7 @@ export const Franchising = () => {
                                         placeholder=" " 
                                         value={formData.message}
                                         onChange={(e) => setFormData({...formData, message: e.target.value})}
+                                        autoComplete="off"
                                     />
                                     <label className={styles.franchising__label}>ваш запит:</label>
                                 </div>

@@ -54,7 +54,14 @@ export const Footer = () => {
                             <div className={styles.footer__contacts}>
                                 <div className={styles.footer__block}>
                                     <span className={styles.footer__label}>адреса</span>
-                                    <p className={styles.footer__address}>вул. Анни Ахматової, 50,<br/>Київ, 02081</p>
+                                    <a 
+                                        href="https://maps.google.com/?q=вул. Анни Ахматової, 50, Київ, 02081" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className={styles.footer__addressLink}
+                                    >
+                                        вул. Анни Ахматової, 50,<br/>Київ, 02081
+                                    </a>
                                 </div>
                                 
                                 <div className={styles.footer__contactLinks}>
@@ -96,10 +103,10 @@ export const Footer = () => {
                     <div className={styles.footer__col}>
                         <Reveal animation="scale" delay={0.5}>
                             <div className={styles.footer__socials}>
-                                <a href="#" target="_blank" rel="noopener noreferrer" className={styles.footer__socialBtn} aria-label="TikTok">
+                                <a href="https://www.tiktok.com/@kolo_playground?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer" className={styles.footer__socialBtn} aria-label="TikTok">
                                     <TikTokIcon />
                                 </a>
-                                <a href="#" target="_blank" rel="noopener noreferrer" className={styles.footer__socialBtn} aria-label="Instagram">
+                                <a href="https://www.instagram.com/kolo_playground?igsh=amlyeDhseTV2YnVx" target="_blank" rel="noopener noreferrer" className={styles.footer__socialBtn} aria-label="Instagram">
                                     <InstagramIcon />
                                 </a>
                             </div>

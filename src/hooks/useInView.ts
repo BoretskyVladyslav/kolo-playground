@@ -9,7 +9,6 @@ export function useInView(threshold = 0.1): [RefObject<any>, boolean] {
             ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsInView(true);
-                    // Якщо анімація має спрацювати лише один раз:
                     if (ref.current) observer.unobserve(ref.current);
                 }
             },

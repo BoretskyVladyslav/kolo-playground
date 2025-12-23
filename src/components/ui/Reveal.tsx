@@ -9,7 +9,7 @@ type Animation = 'fade-up' | 'slide-in' | 'scale' | 'blur';
 interface RevealProps {
     children: ReactNode;
     animation?: Animation;
-    delay?: number; // затримка в секундах (0.1, 0.2...)
+    delay?: number; 
     duration?: number;
     className?: string;
 }

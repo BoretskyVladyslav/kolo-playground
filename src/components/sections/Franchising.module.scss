@@ -157,6 +157,7 @@
         @include mobile {
             flex-direction: column;
             align-items: flex-start;
+            gap: 30px;
         }
     }
 
@@ -167,14 +168,21 @@
     }
 
     &__stepText {
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 22px;
+        font-weight: 700;
         text-transform: lowercase;
+        line-height: 1.2;
+
+        @include mobile {
+            font-size: 18px;
+        }
     }
 
     &__arrow {
         color: #8bae18;
         opacity: 0.7;
+        width: 24px;
+        height: 24px;
         
         @include mobile {
             transform: rotate(90deg);

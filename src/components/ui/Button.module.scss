@@ -1,0 +1,60 @@
+@use "../../styles/variables" as *;
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    border-radius: 100px;
+    transition: all $transition-base;
+    text-transform: uppercase;
+    position: relative;
+    z-index: $z-default;
+    white-space: nowrap;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &.primary {
+        background-color: $color-accent;
+        color: #000000;
+
+        &:hover {
+            background-color: #ffffff;
+            box-shadow: 0 0 20px rgba($color-accent, 0.4);
+            transform: translateY(-2px);
+        }
+    }
+
+    &.outline {
+        background-color: transparent;
+        border: 1px solid rgba($color-text, 0.3);
+        color: $color-text;
+
+        &:hover {
+            border-color: $color-text;
+            background-color: $color-text;
+            color: $color-bg;
+        }
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        cursor: not-allowed;
+        filter: grayscale(100%);
+    }
+}
+
+@include mobile {
+    .button {
+        padding: 12px 24px;
+        font-size: 14px;
+        width: 100%;
+    }
+}

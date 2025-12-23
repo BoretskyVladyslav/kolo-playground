@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { SmoothScroll } from "../components/providers/SmoothScroll"; // Імпорт компонента
+import { SmoothScroll } from "../components/providers/SmoothScroll";
 import "./globals.scss";
 
 const inter = Inter({
@@ -12,6 +12,17 @@ const inter = Inter({
 export const metadata: Metadata = {
     title: "KOLO - Розважальний комплекс",
     description: "Найкраще місце для відпочинку, святкувань та розваг.",
+    icons: {
+        icon: "/favicon.ico",
+    },
+};
+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    themeColor: "#020b26",
+    interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({

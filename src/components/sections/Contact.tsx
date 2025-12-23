@@ -10,7 +10,7 @@ export const Contact = () => {
             <div className={styles.contact__glow} />
 
             <div className={styles.contact__container}>
-                <span className={styles.contact__index}>[4]</span>
+                <span className={styles.contact__index} aria-hidden="true">[4]</span>
 
                 <div className={styles.contact__grid}>
                     <div className={styles.contact__sidebar}>
@@ -23,7 +23,13 @@ export const Contact = () => {
                         </Reveal>
                         
                         <Reveal animation="scale" delay={0.2}>
-                            <a href="#" className={styles.contact__socialBtn} aria-label="Instagram">
+                            <a 
+                                href="https://www.instagram.com/kolo_playground?igsh=amlyeDhseTV2YnVx" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className={styles.contact__socialBtn} 
+                                aria-label="Instagram"
+                            >
                                 <Instagram size={32} strokeWidth={2} />
                             </a>
                         </Reveal>
@@ -46,6 +52,7 @@ export const Contact = () => {
                                         className={styles.contact__input} 
                                         placeholder=" " 
                                         required 
+                                        autoComplete="name"
                                     />
                                     <label htmlFor="name" className={styles.contact__label}>ваше ім'я:</label>
                                 </div>
@@ -59,6 +66,7 @@ export const Contact = () => {
                                         className={styles.contact__input} 
                                         placeholder=" " 
                                         required 
+                                        autoComplete="tel"
                                     />
                                     <label htmlFor="phone" className={styles.contact__label}>номер телефону:</label>
                                 </div>
@@ -71,6 +79,7 @@ export const Contact = () => {
                                         id="request" 
                                         className={styles.contact__input} 
                                         placeholder=" " 
+                                        autoComplete="off"
                                     />
                                     <label htmlFor="request" className={styles.contact__label}>ваш запит:</label>
                                 </div>

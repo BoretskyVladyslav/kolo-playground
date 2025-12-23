@@ -2,156 +2,200 @@
 @use "../../styles/mixins" as *;
 
 @keyframes floatStar {
-	0%, 100% { transform: translateY(0) rotate(10deg); }
-	50% { transform: translateY(-15px) rotate(-5deg); }
+    0%, 100% { transform: translateY(0) rotate(10deg); }
+    50% { transform: translateY(-15px) rotate(-5deg); }
 }
 
 .birthdays {
-	position: relative;
-	padding: 180px 0;
-	background: transparent;
-	color: $color-text;
-	overflow: hidden;
+    position: relative;
+    padding: 180px 0;
+    background: transparent;
+    color: $color-text;
+    overflow: hidden;
 
-	&__container {
-		max-width: $container-width;
-		margin: 0 auto;
-		padding: 0 $gutter;
-		position: relative;
-	}
+    @include mobile {
+        padding: 80px 0;
+    }
 
-	&__header {
-		display: flex;
-		justify-content: center;
-		position: relative;
-		margin-bottom: 150px;
-	}
+    &__container {
+        max-width: $container-width;
+        margin: 0 auto;
+        padding: 0 $gutter;
+        position: relative;
+    }
 
-	&__title {
-		font-size: clamp(48px, 6vw, 80px);
-		font-weight: 900;
-		text-transform: uppercase;
-		letter-spacing: 2px;
-		text-align: center;
-	}
+    &__header {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 150px;
 
-	&__index {
-		position: absolute;
-		right: 0;
-		top: 10px;
-		font-size: 18px;
-		font-weight: 700;
-		opacity: 0.4;
-		color: $color-accent;
-		
-		@include mobile {
-			display: none;
-		}
-	}
+        @include mobile {
+            margin-bottom: 60px;
+        }
+    }
 
-	&__content {
-		display: grid;
-		grid-template-columns: 1fr 1.2fr;
-		gap: 100px;
+    &__title {
+        font-size: clamp(40px, 6vw, 80px);
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+    }
 
-		@include mobile {
-			grid-template-columns: 1fr;
-			gap: 60px;
-		}
-	}
+    &__index {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        font-size: 18px;
+        font-weight: 700;
+        opacity: 0.4;
+        color: $color-accent;
+        font-family: monospace;
+        
+        @include mobile {
+            display: none;
+        }
+    }
 
-	&__sidebar {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-	}
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 100px;
 
-	&__intro {
-		display: flex;
-		flex-direction: column;
-		gap: 50px;
-	}
+        @include tablet {
+            grid-template-columns: 1fr;
+            gap: 60px;
+        }
 
-	&__text {
-		font-size: 24px;
-		line-height: 1.4;
-		font-weight: 600;
-		text-transform: uppercase;
-		max-width: 450px;
-		color: rgba($color-text, 0.9);
-	}
+        @include mobile {
+            grid-template-columns: 1fr;
+            gap: 50px;
+        }
+    }
 
-	&__highlight {
-		font-size: 24px;
-		line-height: 1.4;
-		font-weight: 600;
-		text-transform: uppercase;
-		color: $color-green;
-		max-width: 500px;
-	}
+    &__sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-	&__starWrapper {
-		margin-top: 150px;
-		
-		@include mobile {
-			margin: 60px auto;
-			display: flex;
-			justify-content: center;
-		}
-	}
+    &__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        
+        @include mobile {
+            gap: 30px;
+        }
+    }
 
-	&__star {
-		// Оновлені стилі для картинки
-		width: 120px;
-		height: 120px;
-		object-fit: contain;
-		// Залишаємо анімацію
-		animation: floatStar 7s ease-in-out infinite;
-		// Додаємо легке світіння
-		filter: drop-shadow(0 0 20px rgba($color-green, 0.6));
-	}
+    &__text {
+        font-size: 24px;
+        line-height: 1.4;
+        font-weight: 600;
+        text-transform: uppercase;
+        max-width: 450px;
+        color: rgba($color-text, 0.9);
 
-	&__timeline {
-		display: flex;
-		flex-direction: column;
-		gap: 60px;
-		padding-top: 20px;
-	}
+        @include mobile {
+            font-size: 20px;
+        }
+    }
 
-	&__step {
-		display: flex;
-		gap: 40px;
-		align-items: flex-start;
+    &__highlight {
+        font-size: 24px;
+        line-height: 1.4;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: $color-green;
+        max-width: 500px;
 
-		@include mobile {
-			gap: 20px;
-		}
-	}
+        @include mobile {
+            font-size: 18px;
+        }
+    }
 
-	&__stepNumber {
-		font-size: 64px;
-		font-weight: 900;
-		line-height: 0.8;
-		color: rgba($color-text, 0.1);
-		font-family: inherit;
-		min-width: 90px;
-	}
+    &__starWrapper {
+        margin-top: 150px;
+        
+        @include tablet {
+            display: none;
+        }
 
-	&__stepContent {
-		padding-top: 5px;
-	}
+        @include mobile {
+            display: none;
+        }
+    }
 
-	&__stepTitle {
-		font-size: 24px;
-		font-weight: 700;
-		margin-bottom: 15px;
-		color: $color-text;
-	}
+    &__star {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        animation: floatStar 7s ease-in-out infinite;
+        filter: drop-shadow(0 0 20px rgba($color-green, 0.6));
+    }
 
-	&__stepDesc {
-		font-size: 18px;
-		line-height: 1.6;
-		color: rgba($color-text, 0.7);
-		max-width: 500px;
-	}
+    &__timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 60px;
+        padding-top: 20px;
+
+        @include mobile {
+            gap: 40px;
+            padding-top: 0;
+        }
+    }
+
+    &__step {
+        display: flex;
+        gap: 40px;
+        align-items: flex-start;
+
+        @include mobile {
+            gap: 20px;
+        }
+    }
+
+    &__stepNumber {
+        font-size: 64px;
+        font-weight: 900;
+        line-height: 0.8;
+        color: rgba($color-text, 0.1);
+        font-family: inherit;
+        min-width: 90px;
+
+        @include mobile {
+            font-size: 40px;
+            min-width: 60px;
+        }
+    }
+
+    &__stepContent {
+        padding-top: 5px;
+    }
+
+    &__stepTitle {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: $color-text;
+
+        @include mobile {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+    }
+
+    &__stepDesc {
+        font-size: 18px;
+        line-height: 1.6;
+        color: rgba($color-text, 0.7);
+        max-width: 500px;
+
+        @include mobile {
+            font-size: 16px;
+        }
+    }
 }

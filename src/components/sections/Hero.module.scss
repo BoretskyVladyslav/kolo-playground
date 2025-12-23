@@ -10,7 +10,7 @@
 
 @keyframes pulseGlow {
     0% { box-shadow: 0 0 0 0 rgba($color-green, 0.4); }
-    70% { box-shadow: 0 0 0 20px rgba($color-green, 0); }
+    70% { box-shadow: 0 0 0 15px rgba($color-green, 0); }
     100% { box-shadow: 0 0 0 0 rgba($color-green, 0); }
 }
 
@@ -27,16 +27,18 @@
 
 .hero {
     position: relative;
-    height: 100vh;
+    height: 100dvh; 
+    min-height: 600px;
     width: 100%;
     @include flex-center;
     overflow: hidden;
     background: radial-gradient(circle at center, #051030 0%, $color-bg 100%);
+    padding-top: 60px; 
 
     &__particles {
         position: absolute;
         inset: 0;
-        z-index: $z-default;
+        z-index: 0;
         overflow: hidden;
         pointer-events: none;
     }
@@ -45,14 +47,15 @@
         position: absolute;
         width: 400px;
         height: 400px;
-        background: radial-gradient(circle, rgba($color-green, 0.4) 0%, rgba($color-pink, 0.2) 50%, transparent 70%);
+        background: radial-gradient(circle, rgba($color-green, 0.3) 0%, rgba($color-pink, 0.15) 50%, transparent 70%);
         filter: blur(80px);
         border-radius: 50%;
         opacity: 0.6;
         animation: float linear infinite;
+        will-change: transform; 
 
         &:nth-child(even) {
-            background: radial-gradient(circle, rgba($color-blue-accent, 0.4) 0%, rgba($color-pink, 0.2) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba($color-blue-accent, 0.3) 0%, rgba($color-pink, 0.15) 50%, transparent 70%);
             width: 500px;
             height: 500px;
         }
@@ -63,26 +66,29 @@
         z-index: 10;
         text-align: center;
         width: 100%;
-        animation: fadeUp 1s ease-out forwards;
+        margin-bottom: 80px; 
     }
 
     &__logoWrapper {
-        margin-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     &__title {
-        font-size: clamp(80px, 20vw, 240px);
+        font-size: clamp(60px, 18vw, 240px); 
         font-weight: 900;
         line-height: 0.8;
         letter-spacing: -0.05em;
         @include flex-center;
-        gap: 10px;
+        gap: 0.05em;
         user-select: none;
     }
 
     &__letter {
         display: inline-block;
         text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        will-change: transform;
 
         &--1 { color: $color-pink; transform: rotate(-3deg); }
         &--2 { color: $color-green; transform: rotate(3deg); }
@@ -91,33 +97,37 @@
     }
 
     &__subtitle {
-        font-size: clamp(16px, 3vw, 32px);
+        font-size: clamp(14px, 2.5vw, 32px);
         letter-spacing: 0.3em;
         font-weight: 800;
-        margin-top: 20px;
+        margin-top: 24px;
         color: rgba($color-text, 0.8);
         text-transform: uppercase;
+        position: relative;
+        padding-left: 0.3em; 
     }
 
     &__bottom {
         position: absolute;
-        bottom: 60px;
+        bottom: 40px;
         left: 0;
         width: 100%;
         padding: 0 60px;
         @include flex-between;
         align-items: flex-end;
         z-index: 20;
-        animation: fadeUp 1s ease-out 0.3s forwards;
-        opacity: 0;
 
         @include mobile {
-            flex-direction: column;
+            flex-direction: column-reverse;
             align-items: center;
-            gap: 40px;
-            bottom: 40px;
+            gap: 30px;
+            bottom: 30px;
             padding: 0 $gutter;
         }
+    }
+
+    &__action {
+        position: relative;
     }
 
     &__button {
@@ -127,9 +137,9 @@
         cursor: pointer;
         padding: 15px 30px;
         @include flex-center;
-        display: inline-flex; // Важливо для тегу <a>
-        text-decoration: none; // Прибираємо підкреслення
-        gap: 10px;
+        display: inline-flex;
+        text-decoration: none;
+        gap: 12px;
         transition: transform $transition-fast;
 
         &:hover {
@@ -143,6 +153,10 @@
                 text-shadow: 0 0 10px rgba($color-green, 0.8);
             }
         }
+
+        &:active {
+            transform: scale(0.98);
+        }
     }
 
     &__bracket {
@@ -153,35 +167,45 @@
     }
 
     &__btnText {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 800;
-        letter-spacing: 1.5px;
+        letter-spacing: 2px;
         color: $color-text;
         text-transform: uppercase;
         transition: color $transition-base;
+        white-space: nowrap;
+
+        @include mobile {
+            font-size: 16px;
+        }
     }
 
     &__glow {
         position: absolute;
-        inset: 5px;
+        inset: 0;
         border: 1px solid rgba($color-green, 0.5);
         border-radius: 4px;
         animation: pulseGlow 2s infinite;
         z-index: $z-negative;
+        pointer-events: none;
     }
 
     &__slogan {
         text-align: right;
 
         p {
-            font-size: 18px;
-            line-height: 1.4;
+            font-size: 16px;
+            line-height: 1.5;
             font-weight: 500;
             color: rgba($color-text, 0.7);
         }
 
         @include mobile {
             text-align: center;
+            
+            p {
+                font-size: 14px;
+            }
         }
     }
 }

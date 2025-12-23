@@ -3,7 +3,7 @@
 .reveal {
     opacity: 0;
     will-change: opacity, transform;
-    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); // Ease-out-cubic
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); 
 
     &--visible {
         opacity: 1;

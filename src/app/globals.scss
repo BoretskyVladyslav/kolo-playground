@@ -8,18 +8,29 @@
 
 html {
     overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: $color-blue-accent $color-bg;
 }
 
 body {
     width: 100%;
-    overflow-x: hidden;
     position: relative;
-    background: radial-gradient(circle at 50% 0%, #0a1540 0%, $color-bg 100%);
-    background-attachment: fixed;
     color: $color-text;
     font-family: $font-main;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    &::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 0%, #0a1540 0%, $color-bg 100%);
+        z-index: -1;
+        pointer-events: none;
+    }
 }
 
 a {
@@ -37,7 +48,11 @@ button {
     border: none;
     background: none;
     font-family: inherit;
-    outline: none;
+
+    &:focus-visible {
+        outline: 2px solid $color-accent;
+        outline-offset: 2px;
+    }
 }
 
 ul {

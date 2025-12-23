@@ -71,7 +71,7 @@ export const FAQ = () => {
                     <Reveal animation="fade-up">
                         <h2 className={styles.faq__title}>FAQ</h2>
                     </Reveal>
-                    <span className={styles.faq__index}>[8]</span>
+                    <span className={styles.faq__index} aria-hidden="true">[8]</span>
                 </div>
 
                 <div className={styles.faq__list}>
