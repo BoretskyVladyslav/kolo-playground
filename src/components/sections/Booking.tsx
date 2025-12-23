@@ -10,6 +10,12 @@ import { supabase } from '@/lib/supabase';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './Booking.module.scss';
 
+declare global {
+    interface Window {
+        fbq: any;
+    }
+}
+
 registerLocale('uk', uk);
 
 const START_HOUR = 11;
@@ -163,6 +169,14 @@ export const Booking = () => {
                 .insert([newBooking]);
 
             if (error) throw error;
+
+            if (typeof window !== 'undefined' && window.fbq) {
+                window.fbq('track', 'Lead', {
+                    content_name: 'Booking',
+                    value: Number(guests) * 400,
+                    currency: 'UAH'
+                });
+            }
 
             setIsSubmitted(true);
             fetchAvailableSlots();
