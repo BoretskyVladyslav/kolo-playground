@@ -45,7 +45,6 @@ export const Header = () => {
 
     const handleScrollTo = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
         e.preventDefault();
-
         const targetId = href.replace('#', '');
         const element = document.getElementById(targetId);
 
@@ -53,7 +52,7 @@ export const Header = () => {
             closeMenu();
             setTimeout(() => {
                 element.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+            }, 300);
         }
     };
 
@@ -66,51 +65,75 @@ export const Header = () => {
                 </Link>
 
                 <nav className={`${styles.header__nav} ${isMenuOpen ? styles['header__nav--active'] : ''}`}>
-                    {navLinks.map((link, i) => (
-                        <Reveal key={link.name} animation="fade-up" delay={i * 0.05}>
-                            <a
-                                href={link.href}
-                                className={styles.header__link}
-                                onClick={(e) => handleScrollTo(e, link.href)}
-                            >
-                                {link.name}
-                            </a>
+                    <div className={styles.header__navList}>
+                        {navLinks.map((link, i) => (
+                            <Reveal key={link.name} animation="fade-up" delay={i * 0.05}>
+                                <a
+                                    href={link.href}
+                                    className={styles.header__link}
+                                    onClick={(e) => handleScrollTo(e, link.href)}
+                                >
+                                    {link.name}
+                                </a>
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    <div className={styles.header__mobileSocials}>
+                         <Reveal animation="fade-up" delay={0.4}>
+                            <div className={styles.socialsWrapper}>
+                                <a
+                                    href="https://www.instagram.com/kolo_playground?igsh=amlyeDhseTV2YnVx"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.header__socialIcon}
+                                >
+                                    <Instagram size={28} />
+                                </a>
+                                <a
+                                    href="https://www.tiktok.com/@kolo_playground?is_from_webapp=1&sender_device=pc"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.header__socialIcon}
+                                >
+                                    <Music2 size={28} />
+                                </a>
+                            </div>
                         </Reveal>
-                    ))}
+                    </div>
                 </nav>
 
-                <div className={styles.header__socials}>
-                    <a
-                        href="https://www.instagram.com/kolo_playground?igsh=amlyeDhseTV2YnVx"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Instagram"
-                        className={styles.header__socialIcon}
-                    >
-                        <Instagram size={20} strokeWidth={2.5} />
-                    </a>
+                <div className={styles.header__actions}>
+                    <div className={styles.header__desktopSocials}>
+                        <a
+                            href="https://www.instagram.com/kolo_playground?igsh=amlyeDhseTV2YnVx"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.header__socialIcon}
+                        >
+                            <Instagram size={20} strokeWidth={2.5} />
+                        </a>
+                        <a
+                            href="https://www.tiktok.com/@kolo_playground?is_from_webapp=1&sender_device=pc"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.header__socialIcon}
+                        >
+                            <Music2 size={20} strokeWidth={2.5} />
+                        </a>
+                    </div>
 
-                    <a
-                        href="https://www.tiktok.com/@kolo_playground?is_from_webapp=1&sender_device=pc"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="TikTok"
-                        className={styles.header__socialIcon}
+                    <button
+                        className={`${styles.header__burger} ${isMenuOpen ? styles['header__burger--active'] : ''}`}
+                        onClick={toggleMenu}
+                        aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
+                        type="button"
                     >
-                        <Music2 size={20} strokeWidth={2.5} />
-                    </a>
+                        <span />
+                        <span />
+                        <span />
+                    </button>
                 </div>
-
-                <button
-                    className={`${styles.header__burger} ${isMenuOpen ? styles['header__burger--active'] : ''}`}
-                    onClick={toggleMenu}
-                    aria-label={isMenuOpen ? 'Закрити меню' : 'Відкрити меню'}
-                    type="button"
-                >
-                    <span />
-                    <span />
-                    <span />
-                </button>
             </div>
         </header>
     );
