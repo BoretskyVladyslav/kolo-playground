@@ -169,8 +169,26 @@
         &:focus { border-color: $color-accent; }
     }
 
-    .refreshBtn {
+    /* Стиль для кнопки скидання */
+    .resetBtn {
         margin-left: auto;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: 0.3s;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+    }
+
+    .refreshBtn {
         background: $color-accent;
         color: black;
         border: none;

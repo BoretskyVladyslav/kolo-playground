@@ -56,17 +56,22 @@ export default function AdminPage() {
         setBookings([]);
     };
 
-    const loadBookings = async () => {
+    // Оновлена функція завантаження: приймає опціональний параметр дати
+    const loadBookings = async (dateOverride?: string) => {
         setLoading(true);
         try {
+            // Використовуємо передану дату АБО поточний стан фільтра
+            // (якщо передали пустий рядок "", то він і буде використаний)
+            const activeDateFilter = dateOverride !== undefined ? dateOverride : filterDate;
+
             let query = supabase
                 .from('bookings')
                 .select('*')
                 .order('date', { ascending: false })
                 .order('start_time', { ascending: false });
 
-            if (filterDate) {
-                query = query.eq('date', filterDate);
+            if (activeDateFilter) {
+                query = query.eq('date', activeDateFilter);
             }
 
             const { data, error } = await query;
@@ -75,7 +80,8 @@ export default function AdminPage() {
             
             setBookings(data || []);
             
-            if (!filterDate) {
+            // Оновлюємо статистику тільки якщо бачимо повний список
+            if (!activeDateFilter) {
                 calculateStats(data || []);
             }
         } catch (error) {
@@ -83,6 +89,12 @@ export default function AdminPage() {
         } finally {
             setLoading(false);
         }
+    };
+
+    // Функція скидання фільтра
+    const handleReset = () => {
+        setFilterDate(''); // Очищаємо інпут
+        loadBookings('');  // Примусово завантажуємо всі записи
     };
 
     const calculateStats = (data: Booking[]) => {
@@ -104,7 +116,7 @@ export default function AdminPage() {
                 .eq('id', id);
 
             if (error) throw error;
-            loadBookings();
+            loadBookings(); // Перезавантаження після видалення
         } catch (error) {
             alert('Помилка видалення запису');
         }
@@ -162,7 +174,17 @@ export default function AdminPage() {
                     value={filterDate} 
                     onChange={(e) => setFilterDate(e.target.value)} 
                 />
-                <button onClick={() => loadBookings()} className={styles.refreshBtn}>Оновити</button>
+                
+                {/* Кнопка Скинути (з'являється тільки якщо вибрана дата) */}
+                {filterDate && (
+                    <button onClick={handleReset} className={styles.resetBtn}>
+                        Скинути дату
+                    </button>
+                )}
+
+                <button onClick={() => loadBookings()} className={styles.refreshBtn}>
+                    Оновити
+                </button>
             </div>
 
             <div className={styles.tableWrapper}>
@@ -204,7 +226,7 @@ export default function AdminPage() {
                             {bookings.length === 0 && (
                                 <tr>
                                     <td colSpan={6} style={{textAlign: 'center', padding: '30px'}}>
-                                        Бронювань не знайдено
+                                        {filterDate ? 'На цю дату записів немає' : 'Бронювань не знайдено'}
                                     </td>
                                 </tr>
                             )}

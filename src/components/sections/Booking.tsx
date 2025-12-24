@@ -180,11 +180,15 @@ export const Booking = () => {
 			}
 
 			const emailData = new FormData();
-			emailData.append('name', formData.name);
-			emailData.append('phone', formData.phone);
-			emailData.append('city', city === '1' ? 'Київ' : 'Інше');
-			
-			await sendBooking(null, emailData);
+            emailData.append('name', formData.name);
+            emailData.append('phone', formData.phone);
+            emailData.append('email', formData.email);
+            emailData.append('city', city === '1' ? 'Київ' : 'Інше');
+            emailData.append('date', formattedDate);
+            emailData.append('time', `${selectedTime} - ${endTimeStr}`);
+            emailData.append('guests', guests);
+            
+            await sendBooking(null, emailData);
 
 			setIsSubmitted(true);
 			fetchAvailableSlots();
