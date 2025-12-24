@@ -1,121 +1,131 @@
 'use client';
 
-import { useState } from 'react';
+// ЗМІНА 1: Імпортуємо useActionState з 'react' замість useFormState з 'react-dom'
+import { useActionState, useEffect, useRef } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Reveal } from '../ui/Reveal';
+import { sendFranchise } from '@/app/actions';
 import styles from './Franchising.module.scss';
 
+const initialState = {
+	success: false,
+	message: '',
+};
+
 export const Franchising = () => {
-    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+	// ЗМІНА 2: Використовуємо useActionState. Він повертає 3 значення: state, action, isPending
+	const [state, formAction, isPending] = useActionState(sendFranchise, initialState);
+	const formRef = useRef<HTMLFormElement>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log('Franchise Request:', formData);
-        alert("Дякуємо! Ми зв'яжемося з вами.");
-    };
+	useEffect(() => {
+		if (state.success && state.message) {
+			alert(state.message);
+			formRef.current?.reset();
+		} else if (state.message) {
+			alert(state.message);
+		}
+	}, [state]);
 
-    const steps = [
-        "залишаєте заявку",
-        "обговорюємо формат і місто",
-        "підписуємо договір",
-        "відкриваємо ваш kolo playground"
-    ];
+	const steps = [
+		"залишаєте заявку",
+		"обговорюємо формат і місто",
+		"підписуємо договір",
+		"відкриваємо ваш kolo playground"
+	];
 
-    return (
-        <section id="franchising" className={styles.franchising}>
-            <div className={styles.franchising__container}>
-                <div className={styles.franchising__header}>
-                    <Reveal animation="fade-up">
-                        <h2 className={styles.franchising__title}>ФРАНЧАЙЗИНГ</h2>
-                    </Reveal>
-                </div>
+	return (
+		<section id="franchising" className={styles.franchising}>
+			<div className={styles.franchising__container}>
+				<div className={styles.franchising__header}>
+					<Reveal animation="fade-up">
+						<h2 className={styles.franchising__title}>ФРАНЧАЙЗИНГ</h2>
+					</Reveal>
+				</div>
 
-                <div className={styles.franchising__content}>
-                    <div className={styles.franchising__sidebar}>
-                        <Reveal animation="slide-in">
-                            <h3 className={styles.franchising__cta}>
-                                СТВОРИ СВІЙ ІНТЕРАКТИВНИЙ ПРОСТІР <br />
-                                РАЗОМ ІЗ НАМИ!
-                            </h3>
-                        </Reveal>
-                    </div>
+				<div className={styles.franchising__content}>
+					<div className={styles.franchising__sidebar}>
+						<Reveal animation="slide-in">
+							<h3 className={styles.franchising__cta}>
+								СТВОРИ СВІЙ ІНТЕРАКТИВНИЙ ПРОСТІР <br />
+								РАЗОМ ІЗ НАМИ!
+							</h3>
+						</Reveal>
+					</div>
 
-                    <div className={styles.franchising__main}>
-                        <Reveal animation="fade-up" delay={0.2}>
-                            <p className={styles.franchising__description}>
-                                Відкрий KOLO Playground – інтерактивний простір із швидкою окупністю. 
-                                Ви отримаєте готову бізнес-модель: дизайн, технічне оснащення, 
-                                навчання персоналу, маркетинг та постійне оновлення ігор.
-                            </p>
-                        </Reveal>
+					<div className={styles.franchising__main}>
+						<Reveal animation="fade-up" delay={0.2}>
+							<p className={styles.franchising__description}>
+								Відкрий KOLO Playground – інтерактивний простір із швидкою окупністю. 
+								Ви отримаєте готову бізнес-модель: дизайн, технічне оснащення, 
+								навчання персоналу, маркетинг та постійне оновлення ігор.
+							</p>
+						</Reveal>
 
-                        <form onSubmit={handleSubmit} className={styles.franchising__form}>
-                            <Reveal animation="fade-up" delay={0.3}>
-                                <div className={styles.franchising__field}>
-                                    <input 
-                                        type="text" 
-                                        className={styles.franchising__input}
-                                        placeholder=" " 
-                                        value={formData.name}
-                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                        required
-                                        autoComplete="name"
-                                    />
-                                    <label className={styles.franchising__label}>ваше ім'я:</label>
-                                </div>
-                            </Reveal>
-                            
-                            <Reveal animation="fade-up" delay={0.4}>
-                                <div className={styles.franchising__field}>
-                                    <input 
-                                        type="email" 
-                                        className={styles.franchising__input}
-                                        placeholder=" " 
-                                        value={formData.email}
-                                        onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                        required
-                                        autoComplete="email"
-                                    />
-                                    <label className={styles.franchising__label}>email:</label>
-                                </div>
-                            </Reveal>
+						<form action={formAction} ref={formRef} className={styles.franchising__form}>
+							<Reveal animation="fade-up" delay={0.3}>
+								<div className={styles.franchising__field}>
+									<input 
+										type="text" 
+										name="name"
+										className={styles.franchising__input}
+										placeholder=" " 
+										required
+										autoComplete="name"
+									/>
+									<label className={styles.franchising__label}>ваше ім'я:</label>
+								</div>
+							</Reveal>
+							
+							<Reveal animation="fade-up" delay={0.4}>
+								<div className={styles.franchising__field}>
+									<input 
+										type="email" 
+										name="email"
+										className={styles.franchising__input}
+										placeholder=" " 
+										required
+										autoComplete="email"
+									/>
+									<label className={styles.franchising__label}>email:</label>
+								</div>
+							</Reveal>
 
-                            <Reveal animation="fade-up" delay={0.5}>
-                                <div className={styles.franchising__field}>
-                                    <input 
-                                        type="text" 
-                                        className={styles.franchising__input}
-                                        placeholder=" " 
-                                        value={formData.message}
-                                        onChange={(e) => setFormData({...formData, message: e.target.value})}
-                                        autoComplete="off"
-                                    />
-                                    <label className={styles.franchising__label}>ваш запит:</label>
-                                </div>
-                            </Reveal>
+							<Reveal animation="fade-up" delay={0.5}>
+								<div className={styles.franchising__field}>
+									<input 
+										type="text" 
+										name="message"
+										className={styles.franchising__input}
+										placeholder=" " 
+										autoComplete="off"
+									/>
+									<label className={styles.franchising__label}>ваш запит:</label>
+								</div>
+							</Reveal>
 
-                            <Reveal animation="fade-up" delay={0.6}>
-                                <button type="submit" className={styles.franchising__submit}>
-                                    надіслати
-                                </button>
-                            </Reveal>
-                        </form>
-                    </div>
-                </div>
+							<Reveal animation="fade-up" delay={0.6}>
+								{/* ЗМІНА 3: Можна вимикати кнопку під час відправки */}
+								<button type="submit" disabled={isPending} className={styles.franchising__submit}>
+									{isPending ? 'надсилаємо...' : 'надіслати'}
+								</button>
+							</Reveal>
+						</form>
+					</div>
+				</div>
 
-                <div className={styles.franchising__steps}>
-                    {steps.map((step, index) => (
-                        <Reveal key={index} animation="fade-up" delay={0.7 + index * 0.1}>
-                            <div className={styles.franchising__stepItem}>
-                                <span className={styles.franchising__stepText}>{step}</span>
-                                {index !== steps.length - 1 && (
-                                    <ArrowRight size={16} className={styles.franchising__arrow} />
-                                )}
-                            </div>
-                        </Reveal>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+				<div className={styles.franchising__steps}>
+					{steps.map((step, index) => (
+						<Reveal key={index} animation="fade-up" delay={0.7 + index * 0.1}>
+							<div className={styles.franchising__stepItem}>
+								<span className={styles.franchising__stepText}>{step}</span>
+								{index !== steps.length - 1 && (
+									<ArrowRight size={16} className={styles.franchising__arrow} />
+								)}
+							</div>
+						</Reveal>
+					))}
+				</div>
+			</div>
+		</section>
+	);
 };

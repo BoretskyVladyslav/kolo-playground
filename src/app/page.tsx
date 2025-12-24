@@ -11,21 +11,21 @@ import { FAQ } from "../components/sections/FAQ";
 import { Footer } from "../components/layout/Footer";
 
 export default function Home() {
-    return (
-        <>
-            <Header />
-            <main>
-                <Hero />
-                <About />
-                <Mission />
-                <Rooms />
-                <Contact />
-                <Birthdays />
-                <Booking />
-                <Franchising />
-                <FAQ />
-            </main>
-            <Footer />
-        </>
-    );
+	return (
+		<>
+			<Header />
+			<main>
+				<Hero />
+				<About />
+				<Mission />
+				<Rooms />
+				<Contact />
+				<Birthdays />
+				<Booking />
+				<Franchising />
+				<FAQ />
+			</main>
+			<Footer />
+		</>
+	);
 }
