@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import styles from './admin.module.scss';
 
-const ADMIN_EMAIL = 'Kolo.playground@gmail.com';
+const ADMIN_EMAIL = 'kolo.playground@gmail.com';
 const ADMIN_PASS = 'Koloahmatovoy50';
 
 interface Booking {
