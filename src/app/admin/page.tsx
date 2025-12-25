@@ -56,12 +56,9 @@ export default function AdminPage() {
         setBookings([]);
     };
 
-    // Оновлена функція завантаження: приймає опціональний параметр дати
     const loadBookings = async (dateOverride?: string) => {
         setLoading(true);
         try {
-            // Використовуємо передану дату АБО поточний стан фільтра
-            // (якщо передали пустий рядок "", то він і буде використаний)
             const activeDateFilter = dateOverride !== undefined ? dateOverride : filterDate;
 
             let query = supabase
@@ -80,7 +77,6 @@ export default function AdminPage() {
             
             setBookings(data || []);
             
-            // Оновлюємо статистику тільки якщо бачимо повний список
             if (!activeDateFilter) {
                 calculateStats(data || []);
             }
@@ -91,10 +87,9 @@ export default function AdminPage() {
         }
     };
 
-    // Функція скидання фільтра
     const handleReset = () => {
-        setFilterDate(''); // Очищаємо інпут
-        loadBookings('');  // Примусово завантажуємо всі записи
+        setFilterDate('');
+        loadBookings('');
     };
 
     const calculateStats = (data: Booking[]) => {
@@ -116,7 +111,7 @@ export default function AdminPage() {
                 .eq('id', id);
 
             if (error) throw error;
-            loadBookings(); // Перезавантаження після видалення
+            loadBookings(); 
         } catch (error) {
             alert('Помилка видалення запису');
         }

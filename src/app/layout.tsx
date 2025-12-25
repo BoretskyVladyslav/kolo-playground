@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { SmoothScroll } from "../components/providers/SmoothScroll";
 import "./globals.scss";
 
@@ -62,6 +63,7 @@ export default function RootLayout({
                 <SmoothScroll>
                     {children}
                 </SmoothScroll>
+                <GoogleAnalytics gaId="G-XN63SY65Z6" />
             </body>
         </html>
     );

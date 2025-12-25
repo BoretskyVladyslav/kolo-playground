@@ -8,6 +8,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@next/third-parties": "^16.1.1",
     "@studio-freight/lenis": "^1.0.42",
     "@supabase/supabase-js": "^2.89.0",
     "date-fns": "^4.1.0",

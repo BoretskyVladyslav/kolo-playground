@@ -4,7 +4,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// --- 1. БРОНЮВАННЯ (2 листи: Клієнту + Адміну) ---
+
 export async function sendBooking(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
@@ -19,7 +19,6 @@ export async function sendBooking(prevState, formData) {
     }
 
     try {
-        // 1. ЛИСТ КЛІЄНТУ
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
             to: [email],
@@ -45,7 +44,6 @@ export async function sendBooking(prevState, formData) {
             `
         });
 
-        // 2. ЛИСТ АДМІНУ (ВАМ)
         await resend.emails.send({
             from: 'Kolo Admin <info@koloplayground.com>',
             to: ['kolo.playground@gmail.com'],
@@ -72,7 +70,6 @@ export async function sendBooking(prevState, formData) {
     }
 }
 
-// --- 2. ФРАНШИЗА (Тільки Адміну) ---
 export async function sendFranchise(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
@@ -105,7 +102,6 @@ export async function sendFranchise(prevState, formData) {
     }
 }
 
-// --- 3. КОНТАКТИ (Тільки Адміну) ---
 export async function sendContact(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');

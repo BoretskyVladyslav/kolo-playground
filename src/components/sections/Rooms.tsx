@@ -10,7 +10,6 @@ import { Reveal } from '../ui/Reveal';
 import 'swiper/css';
 import styles from './Rooms.module.scss';
 
-// ... (масив rooms залишається тим самим, що і був у попередньому кроці)
 const rooms = [
     {
         id: 1,
@@ -34,7 +33,6 @@ const rooms = [
             ]
         }
     },
-    // ... інші кімнати (без змін) ...
     {
         id: 2,
         title: 'ІНТЕРАКТИВНІ ПАЗЛИ',

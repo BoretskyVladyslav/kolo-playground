@@ -136,7 +136,7 @@
         transition: all $transition-base;
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        position: relative; // Важливо для позиціонування оверлею
+        position: relative; 
 
         &:hover {
             border-color: rgba($color-green, 0.5);
@@ -249,12 +249,11 @@
         }
     }
 
-    // === OVERLAY STYLES ===
     &__overlay {
         position: absolute;
-        inset: 0; // Top, right, bottom, left = 0
-        background: #0d1b40; // Суцільний фон, щоб перекрити все
-        z-index: 20; // Вище ніж контент картки
+        inset: 0; 
+        background: #0d1b40;
+        z-index: 20;
         padding: 24px;
         display: flex;
         flex-direction: column;
@@ -305,8 +304,7 @@
         overflow-y: auto;
         padding-right: 5px;
         margin-bottom: 15px;
-        
-        // Стилізація скролбару
+
         &::-webkit-scrollbar {
             width: 4px;
         }

@@ -1,7 +1,6 @@
 @use "../../styles/variables" as *;
 @use "../../styles/mixins" as *;
 
-// Встановлюємо точку перелому на 1100px, щоб уникнути накладання
 $bp-menu-switch: 1100px;
 
 .header {
@@ -40,7 +39,7 @@ $bp-menu-switch: 1100px;
         z-index: 105; 
         position: relative;
         text-decoration: none;
-        flex-shrink: 0; // Забороняємо логотипу стискатись
+        flex-shrink: 0; 
     }
 
     .logoMain {
@@ -58,19 +57,16 @@ $bp-menu-switch: 1100px;
         text-shadow: 0 0 15px rgba($color-green, 0.4);
         letter-spacing: -0.02em;
 
-        // Прибираємо друге слово на дуже маленьких екранах
         @media (max-width: 360px) {
             display: none;
         }
     }
 
-    // === НАВІГАЦІЯ ===
     &__nav {
         display: flex;
         gap: 32px;
         align-items: center;
 
-        // Критична зміна: ховаємо десктопне меню раніше (на 1100px)
         @media (max-width: $bp-menu-switch) {
             position: fixed;
             top: 0;
@@ -112,10 +108,9 @@ $bp-menu-switch: 1100px;
 
     &__navList {
         display: flex;
-        gap: 25px; // Трохи зменшив відступ між пунктами для десктопу
+        gap: 25px;
         align-items: center;
 
-        // Додатковий медіа-запит для проміжку 1100-1200px (щоб все влазило)
         @media (min-width: $bp-menu-switch) and (max-width: 1250px) {
             gap: 15px; 
             
@@ -141,7 +136,7 @@ $bp-menu-switch: 1100px;
         position: relative;
         padding: 5px 0;
         text-decoration: none;
-        white-space: nowrap; // Забороняємо перенос тексту посилань
+        white-space: nowrap; 
 
         &::after {
             content: '';
@@ -159,7 +154,6 @@ $bp-menu-switch: 1100px;
             &::after { width: 100%; }
         }
 
-        // Стилі посилань всередині мобільного меню
         @media (max-width: $bp-menu-switch) {
             font-size: 28px;
             font-weight: 800;
@@ -176,19 +170,17 @@ $bp-menu-switch: 1100px;
         flex-shrink: 0;
     }
 
-    // Соцмережі на десктопі
+
     &__desktopSocials {
         display: flex;
         gap: 16px;
         align-items: center;
-        
-        // Ховаємо їх одночасно з переходом меню в бургер
+
         @media (max-width: $bp-menu-switch) {
             display: none;
         }
     }
 
-    // Соцмережі в мобільному меню
     &__mobileSocials {
         display: none;
         
@@ -218,11 +210,9 @@ $bp-menu-switch: 1100px;
         }
     }
 
-    // Бургер меню
     &__burger {
         display: none;
 
-        // Показуємо бургер раніше (на 1100px)
         @media (max-width: $bp-menu-switch) {
             display: flex;
             flex-direction: column;
