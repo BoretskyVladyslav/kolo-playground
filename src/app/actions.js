@@ -4,7 +4,6 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-
 export async function sendBooking(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
@@ -18,28 +17,36 @@ export async function sendBooking(prevState, formData) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
     }
 
+    const price = Number(guests) * 400;
+
     try {
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
             to: [email],
-            subject: `✅ Ваше бронювання підтверджено!`,
+            subject: `🟡 Заявку прийнято! Очікуємо підтвердження оплати`,
             html: `
                 <div style="font-family: Arial, sans-serif; font-size: 16px; color: #333; line-height: 1.6;">
-                    <p>Шановний(а) <strong>${name}</strong>,</p>
-                    <p>Ваше бронювання підтверджено!</p>
-                    <div style="background: #f4f4f4; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <h3 style="margin-top: 0; color: #555;">Деталі:</h3>
+                    <p>Вітаємо, <strong>${name}</strong>!</p>
+                    <p>Ми зарезервували час для вашої компанії.</p>
+                    
+                    <div style="background: #fffbe6; border: 1px solid #ffe58f; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="margin-top: 0; color: #faad14;">⚠️ Статус: Очікує оплати</h3>
+                        <p style="margin: 5px 0;">Щоб гарантувати бронювання, будь ласка, завершіть оплату на сайті або зв'яжіться з нами.</p>
+                    </div>
+
+                    <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="margin-top: 0; color: #555;">Деталі запису:</h3>
                         <p style="margin: 5px 0;"><strong>Дата:</strong> ${date}</p>
                         <p style="margin: 5px 0;"><strong>Час:</strong> ${time}</p>
-                        <p style="margin: 5px 0;"><strong>Кількість людей:</strong> ${guests}</p>
-                        <p style="margin: 5px 0;"><strong>Телефон:</strong> <a href="tel:${phone}" style="color: #333; text-decoration: none;">${phone}</a></p>
+                        <p style="margin: 5px 0;"><strong>Гостей:</strong> ${guests}</p>
+                        <p style="margin: 5px 0;"><strong>До сплати:</strong> ${price} грн</p>
                     </div>
-                    <p>Дякуємо за Ваше бронювання!</p>
-                    <br/>
-                    <p style="color: #888; font-size: 14px;">
-                        З найкращими побажаннями,<br/>
-                        <strong>Команда Kolo Playground</strong>
+
+                    <p style="font-size: 14px; color: #666;">
+                        *Якщо ви вже оплатили, ігноруйте це нагадування. Ми надішлемо підтвердження найближчим часом.
                     </p>
+                    <br/>
+                    <p>Чекаємо на вас за адресою: <strong>м. Київ, вул. Анни Ахматової, 50</strong></p>
                 </div>
             `
         });
@@ -47,23 +54,23 @@ export async function sendBooking(prevState, formData) {
         await resend.emails.send({
             from: 'Kolo Admin <info@koloplayground.com>',
             to: ['kolo.playground@gmail.com'],
-            subject: `🔥 Нова заявка: ${name} (${date})`,
+            subject: `🆕 Нове бронювання: ${name} (Очікує)`,
             html: `
                 <div style="font-family: sans-serif; font-size: 16px; color: #333;">
-                    <h2 style="color: #d4ff00; background: #000; padding: 10px;">Нове бронювання</h2>
+                    <h2 style="background: #eee; padding: 10px; border-left: 5px solid #d4ff00;">Нова заявка (Pending)</h2>
                     <p><strong>Ім'я:</strong> ${name}</p>
                     <p><strong>Телефон:</strong> <a href="tel:${phone}">${phone}</a></p>
                     <p><strong>Email:</strong> ${email}</p>
-                    <p><strong>Місто:</strong> ${city}</p>
                     <hr>
                     <p><strong>Дата:</strong> ${date}</p>
                     <p><strong>Час:</strong> ${time}</p>
                     <p><strong>Людей:</strong> ${guests}</p>
+                    <p><strong>Сума:</strong> ${price} грн</p>
                 </div>
             `
         });
 
-        return { success: true, message: 'Заявку успішно відправлено!' };
+        return { success: true, message: 'Заявку створено!' };
     } catch (error) {
         console.error(error);
         return { success: false, message: 'Помилка відправки' };

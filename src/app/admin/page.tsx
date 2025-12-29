@@ -18,6 +18,8 @@ interface Booking {
     customer_phone: string;
     customer_email: string;
     created_at: string;
+    status: 'pending' | 'paid' | 'failed';
+    payment_id?: string;
 }
 
 export default function AdminPage() {
@@ -30,6 +32,16 @@ export default function AdminPage() {
     const [loading, setLoading] = useState(false);
     const [filterDate, setFilterDate] = useState('');
     const [stats, setStats] = useState({ total: 0, today: 0 });
+
+    const [showModal, setShowModal] = useState(false);
+    const [manualBooking, setManualBooking] = useState({
+        date: new Date().toISOString().split('T')[0],
+        time: '12:00',
+        guests: '6',
+        name: '',
+        phone: '',
+        email: ''
+    });
 
     useEffect(() => {
         const isLogged = localStorage.getItem('kolo_admin_logged');
@@ -72,14 +84,10 @@ export default function AdminPage() {
             }
 
             const { data, error } = await query;
-
             if (error) throw error;
             
             setBookings(data || []);
-            
-            if (!activeDateFilter) {
-                calculateStats(data || []);
-            }
+            if (!activeDateFilter) calculateStats(data || []);
         } catch (error) {
             console.error('Error loading bookings:', error);
         } finally {
@@ -103,17 +111,67 @@ export default function AdminPage() {
 
     const deleteBooking = async (id: number) => {
         if (!confirm('Ви впевнені, що хочете видалити це бронювання?')) return;
-
         try {
-            const { error } = await supabase
-                .from('bookings')
-                .delete()
-                .eq('id', id);
-
+            const { error } = await supabase.from('bookings').delete().eq('id', id);
             if (error) throw error;
             loadBookings(); 
         } catch (error) {
             alert('Помилка видалення запису');
+        }
+    };
+
+    const markAsPaid = async (id: number) => {
+        if (!confirm('Підтвердити оплату для цього замовлення?')) return;
+        try {
+            const { error } = await supabase.from('bookings').update({ status: 'paid' }).eq('id', id);
+            if (error) throw error;
+            loadBookings();
+        } catch (error) {
+            alert('Помилка оновлення статусу');
+        }
+    };
+
+    const createManualBooking = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const [h, m] = manualBooking.time.split(':').map(Number);
+            const startMinutes = h * 60 + m;
+            const endMinutes = startMinutes + 120; // 2 години
+            const endH = Math.floor(endMinutes / 60);
+            const endM = endMinutes % 60;
+            const endTimeStr = `${endH}:${endM === 0 ? '00' : '30'}`;
+
+            const newBooking = {
+                city_id: 1,
+                date: manualBooking.date,
+                start_time: manualBooking.time,
+                end_time: endTimeStr,
+                number_of_people: parseInt(manualBooking.guests),
+                customer_name: manualBooking.name || 'Адмін Бронь',
+                customer_phone: manualBooking.phone || '-',
+                customer_email: manualBooking.email || '-',
+                created_at: new Date().toISOString(),
+                status: 'paid' 
+            };
+
+            const { error } = await supabase.from('bookings').insert([newBooking]);
+            if (error) throw error;
+
+            setShowModal(false);
+            setManualBooking({
+                date: new Date().toISOString().split('T')[0],
+                time: '12:00',
+                guests: '6',
+                name: '',
+                phone: '',
+                email: ''
+            });
+            alert('Бронювання успішно створено!');
+            loadBookings();
+
+        } catch (error) {
+            console.error(error);
+            alert('Помилка створення бронювання');
         }
     };
 
@@ -128,13 +186,13 @@ export default function AdminPage() {
                                 type="email" 
                                 placeholder="Email" 
                                 value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                onChange={e => setEmail(e.target.value)} 
                             />
                             <input 
                                 type="password" 
                                 placeholder="Password" 
                                 value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                onChange={e => setPassword(e.target.value)} 
                             />
                             <button type="submit">УВІЙТИ</button>
                             {loginError && <p className={styles.error}>{loginError}</p>}
@@ -149,7 +207,12 @@ export default function AdminPage() {
         <div className={styles.adminContainer}>
             <header className={styles.header}>
                 <h1>Адмін Панель</h1>
-                <button onClick={handleLogout} className={styles.logoutBtn}>Вийти</button>
+                <div className={styles.headerActions}>
+                    <button onClick={() => setShowModal(true)} className={styles.createBtn}>
+                        + Додати бронь
+                    </button>
+                    <button onClick={handleLogout} className={styles.logoutBtn}>Вийти</button>
+                </div>
             </header>
 
             <div className={styles.stats}>
@@ -170,7 +233,6 @@ export default function AdminPage() {
                     onChange={(e) => setFilterDate(e.target.value)} 
                 />
                 
-                {/* Кнопка Скинути (з'являється тільки якщо вибрана дата) */}
                 {filterDate && (
                     <button onClick={handleReset} className={styles.resetBtn}>
                         Скинути дату
@@ -189,6 +251,7 @@ export default function AdminPage() {
                     <table className={styles.table}>
                         <thead>
                             <tr>
+                                <th>Статус</th>
                                 <th>Дата</th>
                                 <th>Час</th>
                                 <th>Клієнт</th>
@@ -200,6 +263,11 @@ export default function AdminPage() {
                         <tbody>
                             {bookings.map((booking) => (
                                 <tr key={booking.id}>
+                                    <td>
+                                        <span className={`${styles.statusBadge} ${styles[booking.status || 'pending']}`}>
+                                            {booking.status === 'paid' ? 'ОПЛАЧЕНО' : 'ОЧІКУЄ'}
+                                        </span>
+                                    </td>
                                     <td>{booking.date}</td>
                                     <td>{booking.start_time} - {booking.end_time}</td>
                                     <td>{booking.customer_name}</td>
@@ -209,18 +277,31 @@ export default function AdminPage() {
                                     </td>
                                     <td>{booking.number_of_people}</td>
                                     <td>
-                                        <button 
-                                            className={`${styles.actionBtn} ${styles.delete}`}
-                                            onClick={() => deleteBooking(booking.id)}
-                                        >
-                                            Видалити
-                                        </button>
+                                        <div className={styles.actions}>
+                                            {booking.status !== 'paid' && (
+                                                <button 
+                                                    className={`${styles.actionBtn} ${styles.confirm}`}
+                                                    onClick={() => markAsPaid(booking.id)}
+                                                    title="Позначити як оплачено"
+                                                >
+                                                    Підтвердити
+                                                </button>
+                                            )}
+                                            
+                                            <button 
+                                                className={`${styles.actionBtn} ${styles.delete}`}
+                                                onClick={() => deleteBooking(booking.id)}
+                                                title="Видалити"
+                                            >
+                                                Видалити
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                             {bookings.length === 0 && (
                                 <tr>
-                                    <td colSpan={6} style={{textAlign: 'center', padding: '30px'}}>
+                                    <td colSpan={7} style={{textAlign: 'center', padding: '30px'}}>
                                         {filterDate ? 'На цю дату записів немає' : 'Бронювань не знайдено'}
                                     </td>
                                 </tr>
@@ -229,6 +310,71 @@ export default function AdminPage() {
                     </table>
                 )}
             </div>
+
+            {showModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modal}>
+                        <div className={styles.modalHeader}>
+                            <h2>Ручне бронювання</h2>
+                            <button onClick={() => setShowModal(false)} className={styles.closeBtn}>×</button>
+                        </div>
+                        <form onSubmit={createManualBooking} className={styles.modalForm}>
+                            <div className={styles.formGroup}>
+                                <label>Дата</label>
+                                <input 
+                                    type="date" 
+                                    required
+                                    value={manualBooking.date}
+                                    onChange={e => setManualBooking({...manualBooking, date: e.target.value})}
+                                />
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>Час (Початок)</label>
+                                    <select 
+                                        value={manualBooking.time}
+                                        onChange={e => setManualBooking({...manualBooking, time: e.target.value})}
+                                    >
+                                        {['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00'].map(t => (
+                                            <option key={t} value={t}>{t}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>Гостей</label>
+                                    <select 
+                                        value={manualBooking.guests}
+                                        onChange={e => setManualBooking({...manualBooking, guests: e.target.value})}
+                                    >
+                                        {Array.from({length: 14}, (_, i) => i + 2).map(n => (
+                                            <option key={n} value={n}>{n}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>Ім'я клієнта</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="Наприклад: Instagram Direct"
+                                    value={manualBooking.name}
+                                    onChange={e => setManualBooking({...manualBooking, name: e.target.value})}
+                                />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>Телефон</label>
+                                <input 
+                                    type="text" 
+                                    placeholder="+380..."
+                                    value={manualBooking.phone}
+                                    onChange={e => setManualBooking({...manualBooking, phone: e.target.value})}
+                                />
+                            </div>
+                            <button type="submit" className={styles.submitBtn}>СТВОРИТИ БРОНЬ (БЕЗ ОПЛАТИ)</button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

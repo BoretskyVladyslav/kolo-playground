@@ -99,7 +99,29 @@
         color: $color-accent;
         font-size: 24px;
     }
+
+    .headerActions {
+        display: flex;
+        gap: 15px;
+    }
     
+    .createBtn {
+        background: $color-accent;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition: 0.3s;
+
+        &:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+    }
+
     .logoutBtn {
         background: rgba(255, 255, 255, 0.1);
         color: white;
@@ -169,7 +191,6 @@
         &:focus { border-color: $color-accent; }
     }
 
-    /* Стиль для кнопки скидання */
     .resetBtn {
         margin-left: auto;
         background: rgba(255, 255, 255, 0.1);
@@ -234,6 +255,7 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         font-size: 14px;
         color: rgba(255, 255, 255, 0.9);
+        vertical-align: middle;
     }
 
     tr:last-child td {
@@ -244,24 +266,63 @@
         background: rgba(255, 255, 255, 0.03); 
     }
 
+    .statusBadge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        
+        &.paid {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.4);
+        }
+        
+        &.pending {
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+            border: 1px solid rgba(241, 196, 15, 0.4);
+        }
+        
+        &.failed {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid rgba(231, 76, 60, 0.4);
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+
     .actionBtn {
-        padding: 8px 12px;
+        padding: 6px 12px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         font-size: 12px;
-        font-weight: 600;
-        transition: 0.3s;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition: 0.2s;
+        white-space: nowrap;
+        
+        &.confirm {
+            background: rgba(46, 204, 113, 0.15);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+            &:hover { background: #2ecc71; color: #fff; }
+        }
         
         &.delete {
             background: rgba(255, 68, 68, 0.15);
-            color: #ff4444;
             border: 1px solid rgba(255, 68, 68, 0.3);
-
-            &:hover { 
-                background: #ff4444; 
-                color: white;
-            }
+            color: #ff4444;
+            &:hover { background: #ff4444; color: white; }
         }
     }
 }
@@ -272,4 +333,111 @@
     font-size: 18px;
     color: $color-accent;
     font-weight: 600;
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: #0d1b40;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+
+    .modalHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+
+        h2 {
+            color: white;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 20px;
+        }
+
+        .closeBtn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+            
+            &:hover { color: $color-accent; }
+        }
+    }
+
+    .modalForm {
+        .formGroup {
+            margin-bottom: 15px;
+
+            label {
+                display: block;
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 12px;
+                margin-bottom: 5px;
+                text-transform: uppercase;
+                font-weight: 700;
+            }
+
+            input, select {
+                width: 100%;
+                padding: 12px;
+                background: rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                color: white;
+                font-size: 15px;
+                outline: none;
+
+                &:focus { border-color: $color-accent; }
+            }
+
+            select option {
+                background: #0d1b40;
+            }
+        }
+
+        .formRow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .submitBtn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 15px;
+            background: $color-accent;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 0 15px rgba($color-accent, 0.3);
+            }
+        }
+    }
 }
