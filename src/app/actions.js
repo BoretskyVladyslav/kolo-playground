@@ -17,9 +17,7 @@ export async function sendBooking(prevState, formData) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
     }
 
-    // 👇 ТУТ МИ ЗМІНИЛИ ЦІНУ НА 10 ГРН ДЛЯ ТЕСТУ
-    // const price = Number(guests) * 400; // Стара формула (вимкнена)
-    const price = 10; // 🔥 Тестова ціна
+    const price = Number(guests) * 400;
 
     try {
         await resend.emails.send({
