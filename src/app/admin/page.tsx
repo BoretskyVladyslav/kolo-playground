@@ -136,7 +136,7 @@ export default function AdminPage() {
         try {
             const [h, m] = manualBooking.time.split(':').map(Number);
             const startMinutes = h * 60 + m;
-            const endMinutes = startMinutes + 120; // 2 години
+            const endMinutes = startMinutes + 120;
             const endH = Math.floor(endMinutes / 60);
             const endM = endMinutes % 60;
             const endTimeStr = `${endH}:${endM === 0 ? '00' : '30'}`;
@@ -264,9 +264,32 @@ export default function AdminPage() {
                             {bookings.map((booking) => (
                                 <tr key={booking.id}>
                                     <td>
-                                        <span className={`${styles.statusBadge} ${styles[booking.status || 'pending']}`}>
-                                            {booking.status === 'paid' ? 'ОПЛАЧЕНО' : 'ОЧІКУЄ'}
-                                        </span>
+                                        {booking.status === 'paid' ? (
+                                            <span style={{
+                                                backgroundColor: '#f6ffed',
+                                                border: '1px solid #b7eb8f',
+                                                color: '#52c41a',
+                                                padding: '5px 10px',
+                                                borderRadius: '4px',
+                                                fontWeight: 'bold',
+                                                display: 'inline-block',
+                                                fontSize: '14px'
+                                            }}>
+                                                ✅ ОПЛАЧЕНО
+                                            </span>
+                                        ) : (
+                                            <span style={{
+                                                backgroundColor: '#fffbe6',
+                                                border: '1px solid #ffe58f',
+                                                color: '#faad14',
+                                                padding: '5px 10px',
+                                                borderRadius: '4px',
+                                                display: 'inline-block',
+                                                fontSize: '14px'
+                                            }}>
+                                                ⏳ ОЧІКУЄ
+                                            </span>
+                                        )}
                                     </td>
                                     <td>{booking.date}</td>
                                     <td>{booking.start_time} - {booking.end_time}</td>

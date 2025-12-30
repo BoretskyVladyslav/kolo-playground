@@ -4,7 +4,12 @@ import { generateSignature } from '@/lib/wayforpay';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { amount, productName, orderReference } = body;
+        
+        // 👇 Ігноруємо ціну з фронтенду, беремо тільки назву і ID
+        const { productName, orderReference } = body;
+
+        // 🔥 ЖОРСТКО СТАВИМО 1 ГРН ДЛЯ ТЕСТУ
+        const amount = 1;
 
         const orderDate = Date.now();
         const ref = orderReference || `ORDER_${orderDate}`;
@@ -13,11 +18,11 @@ export async function POST(req: Request) {
         const data = {
             orderReference: ref,
             orderDate,
-            amount,
+            amount, // Тут буде 1
             currency: 'UAH',
             productName: [productName],
             productCount: [1],
-            productPrice: [amount],
+            productPrice: [amount], // Тут теж 1
             serviceUrl: `${baseUrl}/api/payment/callback`,
         };
 
