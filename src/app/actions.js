@@ -17,8 +17,8 @@ export async function sendBooking(prevState, formData) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
     }
 
-    const price = Number(guests) * 400;
-
+    // const price = Number(guests) * 400;
+    const price = 1;
     try {
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
