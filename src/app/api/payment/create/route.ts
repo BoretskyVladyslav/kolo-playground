@@ -5,11 +5,9 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         
-        // 👇 Ігноруємо ціну з фронтенду, беремо тільки назву і ID
-        const { productName, orderReference } = body;
-
-        // 🔥 ЖОРСТКО СТАВИМО 1 ГРН ДЛЯ ТЕСТУ
-        const amount = 1;
+        // 👇 ГОЛОВНЕ: Беремо amount (ціну) з даних, які прислав фронтенд
+        // (Раніше тут стояло const amount = 1; — це ми прибираємо)
+        const { amount, productName, orderReference } = body; 
 
         const orderDate = Date.now();
         const ref = orderReference || `ORDER_${orderDate}`;
@@ -18,11 +16,11 @@ export async function POST(req: Request) {
         const data = {
             orderReference: ref,
             orderDate,
-            amount, // Тут буде 1
+            amount, // Тут тепер реальна сума (наприклад 1600)
             currency: 'UAH',
             productName: [productName],
             productCount: [1],
-            productPrice: [amount], // Тут теж 1
+            productPrice: [amount],
             serviceUrl: `${baseUrl}/api/payment/callback`,
         };
 

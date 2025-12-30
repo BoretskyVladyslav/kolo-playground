@@ -13,7 +13,6 @@ export async function sendBooking(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
     const email = formData.get('email');
-    const city = formData.get('city');
     const date = formData.get('date');
     const time = formData.get('time');
     const guests = formData.get('guests');
@@ -22,10 +21,8 @@ export async function sendBooking(prevState, formData) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
     }
 
-    // 1. Розрахунок ціни
     const price = Number(guests) * 400;
 
-    // 2. Розрахунок часу завершення (+2 години)
     let endTimeStr = '';
     if (time) {
         const [h, m] = time.split(':').map(Number);
@@ -34,13 +31,11 @@ export async function sendBooking(prevState, formData) {
     }
 
     try {
-        // 3. ЗБЕРЕЖЕННЯ В БАЗУ ДАНИХ (Supabase)
-        // Це критично для роботи адмінки та callback-у
-        const { data: booking, error: dbError } = await supabase
+        const { error: dbError } = await supabase
             .from('bookings')
             .insert([
                 {
-                    city_id: 1, 
+                    city_id: 1,
                     date: date,
                     start_time: time,
                     end_time: endTimeStr,
@@ -48,18 +43,12 @@ export async function sendBooking(prevState, formData) {
                     customer_name: name,
                     customer_phone: phone,
                     customer_email: email,
-                    status: 'pending' // Статус за замовчуванням
+                    status: 'pending'
                 }
-            ])
-            .select()
-            .single();
+            ]);
 
-        if (dbError) {
-            console.error('Supabase Error:', dbError);
-            // Ми не зупиняємо процес, але в логах це побачимо
-        }
+        if (dbError) console.error('Supabase Error:', dbError);
 
-        // 4. Відправка листів
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
             to: [email],
@@ -110,13 +99,7 @@ export async function sendBooking(prevState, formData) {
             `
         });
 
-        // Повертаємо успіх (і бажано ID замовлення, якщо фронт його використовує для оплати)
-        return { 
-            success: true, 
-            message: 'Заявку створено!',
-            bookingId: booking?.id // Це може знадобитись для кнопки оплати
-        };
-
+        return { success: true, message: 'Заявку створено!' };
     } catch (error) {
         console.error(error);
         return { success: false, message: 'Помилка відправки' };
