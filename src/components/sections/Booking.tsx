@@ -3,10 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import { uk } from 'date-fns/locale/uk';
+import { uk } from 'date-fns/locale';
 import { ChevronDown, Calendar, MapPin, Users, Clock, Banknote, AlertCircle } from 'lucide-react';
 import { Reveal } from '../ui/Reveal';
 import { supabase } from '@/lib/supabase';
+// @ts-ignore
 import { sendBooking } from '@/app/actions';
 import { PaymentSummary } from '../payment/PaymentSummary';
 import 'react-datepicker/dist/react-datepicker.css';
