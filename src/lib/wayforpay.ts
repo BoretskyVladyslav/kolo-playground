@@ -10,6 +10,7 @@ interface PaymentData {
 	productName: string[];
 	productCount: number[];
 	productPrice: number[];
+	merchantDomainName: string; // <--- Додали це поле
 }
 
 interface CallbackData {
@@ -24,20 +25,20 @@ interface CallbackData {
 }
 
 export const generateSignature = (data: PaymentData) => {
-	// Очищаємо домен від можливого слеша в кінці, щоб уникнути помилок підпису
-	const domain = (process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000').replace(/\/$/, "");
-
 	const stringToSign = [
 		MERCHANT_ACCOUNT,
-		domain,
+		data.merchantDomainName, // Використовуємо те, що передали
 		data.orderReference,
 		data.orderDate,
-		String(data.amount), // Явно перетворюємо на рядок
+		String(data.amount),
 		'UAH',
 		...data.productName,
 		...data.productCount,
-		...data.productPrice.map(String) // Ціни теж у рядки
+		...data.productPrice.map(String)
 	].join(';');
+
+	// 👇 ЦЕЙ LOG КРИТИЧНО ВАЖЛИВИЙ ДЛЯ ДЕБАГУ
+	console.log('STRING TO SIGN:', stringToSign); 
 
 	return crypto
 		.createHmac('md5', SECRET_KEY)
