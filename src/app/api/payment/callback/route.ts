@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     try {
         const body = await req.json();
         
-        // 👇 ПОВЕРНУЛИ: Беремо реальну суму, яку порахував сайт
+        // 👇 ПОВЕРТАЄМО: Беремо amount (ціну), яку надіслав фронтенд
         const { amount, productName, orderReference } = body; 
 
         const orderDate = Date.now();
@@ -15,11 +15,11 @@ export async function POST(req: Request) {
         const data = {
             orderReference: ref,
             orderDate,
-            amount, // Тут буде те, що прийшло (наприклад 1600, 2400...)
+            amount, // Тепер тут буде реальна сума (наприклад, 1600)
             currency: 'UAH',
             productName: [productName],
             productCount: [1],
-            productPrice: [amount],
+            productPrice: [amount], 
             serviceUrl: `${baseUrl}/api/payment/callback`,
         };
 
