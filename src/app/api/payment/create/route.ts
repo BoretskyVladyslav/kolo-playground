@@ -4,9 +4,7 @@ import { generateSignature } from '@/lib/wayforpay';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { productName, orderReference } = body;
-
-        const amount = 1;
+        const { amount, productName, orderReference } = body;
 
         const orderDate = Date.now();
         const ref = orderReference || `ORDER_${orderDate}`;
