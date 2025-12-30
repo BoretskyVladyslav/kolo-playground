@@ -1,60 +1,45 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-
-// Твій секретний ключ (Service Role)
-const SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vbGZvaWt0amJuaGV2ZnV4bnV0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTkwNjUxOSwiZXhwIjoyMDc1NDgyNTE5fQ.yfC_eq-YL8BGWw7cxcCn7hqJvGOaUtTsgmftf6z069M';
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    SERVICE_ROLE_KEY
-);
+import { generateSignature } from '@/lib/wayforpay';
 
 export async function POST(req: Request) {
     try {
-        const text = await req.text();
-        let body;
-
-        try {
-            body = JSON.parse(text);
-        } catch {
-            const params = new URLSearchParams(text);
-            body = Object.fromEntries(params);
-        }
-
-        const { orderReference, transactionStatus } = body;
+        const body = await req.json();
         
-        console.log(`📥 Отримано Callback. ID: ${orderReference}, Статус: ${transactionStatus}`);
+        // 👇 ПОВЕРНУЛИ: Беремо реальну суму, яку порахував сайт
+        const { amount, productName, orderReference } = body; 
 
-        if (transactionStatus === 'Approved') {
-            
-            // 👇 МАГІЯ ТУТ: Видаляємо всі букви, залишаємо тільки цифри
-            // Якщо прийшло "BOOKING_249" -> стане "249"
-            // Якщо прийшло "ORDER_123" -> стане "123"
-            const cleanId = orderReference.replace(/\D/g, ''); 
-            
-            console.log(`🔍 Шукаємо в базі ID: ${cleanId}`);
+        const orderDate = Date.now();
+        const ref = orderReference || `ORDER_${orderDate}`;
+        const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
-            const { error } = await supabase
-                .from('bookings')
-                .update({ status: 'paid' })
-                .eq('id', cleanId); // Шукаємо по чистому числу
+        const data = {
+            orderReference: ref,
+            orderDate,
+            amount, // Тут буде те, що прийшло (наприклад 1600, 2400...)
+            currency: 'UAH',
+            productName: [productName],
+            productCount: [1],
+            productPrice: [amount],
+            serviceUrl: `${baseUrl}/api/payment/callback`,
+        };
 
-            if (error) {
-                console.error('❌ Помилка Supabase:', error);
-            } else {
-                console.log('✅ УСПІХ! Статус змінено на PAID для ID:', cleanId);
-            }
-        }
+        const signature = generateSignature({
+            orderReference: ref,
+            orderDate,
+            amount,
+            productName: data.productName,
+            productCount: data.productCount,
+            productPrice: data.productPrice
+        });
 
         return NextResponse.json({
-            orderReference,
-            status: 'accept',
-            time: Date.now(),
-            signature: ''
+            ...data,
+            merchantAccount: process.env.WAYFORPAY_MERCHANT_ACCOUNT,
+            merchantDomainName: process.env.NEXT_PUBLIC_DOMAIN,
+            signature
         });
 
     } catch (error) {
-        console.error('🔥 Критична помилка сервера:', error);
-        return NextResponse.json({ status: 'error' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to create payment' }, { status: 500 });
     }
 }
