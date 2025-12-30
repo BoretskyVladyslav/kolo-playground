@@ -447,21 +447,21 @@ export const Booking = () => {
 										) : slots.length > 0 ? (
 												slots.map(slot => (
 														<button
-														key={slot.time}
-														disabled={!slot.available}
-														onClick={() => setSelectedTime(slot.time)}
-														className={`${styles.slotBtn} ${
+															key={slot.time}
+															disabled={!slot.available}
+															onClick={() => setSelectedTime(slot.time)}
+															className={`${styles.slotBtn} ${
 																selectedTime === slot.time ? styles.active : ''
-														}`}
+															}`}
 														>
-														<span className={styles.time}>{slot.time}</span>
-														<span className={styles.seats} style={{
+															<span className={styles.time}>{slot.time}</span>
+															<span className={styles.seats} style={{
 																color: slot.available ? 'rgba(255,255,255,0.7)' : '#ff4444'
-														}}>
+															}}>
 																		{slot.available 
 																				? `Вільно: ${slot.remaining} з ${MAX_CAPACITY}` 
 																				: 'Місць немає'}
-														</span>
+															</span>
 														</button>
 												))
 										) : (
@@ -493,50 +493,50 @@ export const Booking = () => {
 														<span>До сплати:</span> <span className={styles.price}>{Number(guests) * PRICE_PER_PERSON} грн</span>
 													</li>
 												</ul>
+
+												<form onSubmit={handleSubmit} className={styles.booking__form}>
+													<div className={styles.inputGroup}>
+														<input
+															type="text"
+															name="name"
+															placeholder=" "
+															required
+															value={formData.name}
+															onChange={handleInputChange}
+														/>
+														<label>Ваше повне ім'я</label>
+													</div>
+
+													<div className={styles.inputGroup}>
+														<input
+															type="tel"
+															name="phone"
+															placeholder=" "
+															required
+															value={formData.phone}
+															onChange={handleInputChange}
+															title="Введіть телефон, наприклад 0501234567"
+														/>
+														<label>Номер телефону</label>
+													</div>
+
+													<div className={styles.inputGroup}>
+														<input
+															type="email"
+															name="email"
+															placeholder=" "
+															required
+															value={formData.email}
+															onChange={handleInputChange}
+														/>
+														<label>Email</label>
+													</div>
+
+													<button type="submit" className={styles.submitBtn}>
+														ПІДТВЕРДИТИ БРОНЮВАННЯ
+													</button>
+												</form>
 											</div>
-
-											<form onSubmit={handleSubmit} className={styles.booking__form}>
-												<div className={styles.inputGroup}>
-													<input
-														type="text"
-														name="name"
-														placeholder=" "
-														required
-														value={formData.name}
-														onChange={handleInputChange}
-													/>
-													<label>Ваше повне ім'я</label>
-												</div>
-
-												<div className={styles.inputGroup}>
-													<input
-														type="tel"
-														name="phone"
-														placeholder=" "
-														required
-														value={formData.phone}
-														onChange={handleInputChange}
-														title="Введіть телефон, наприклад 0501234567"
-													/>
-													<label>Номер телефону</label>
-												</div>
-
-												<div className={styles.inputGroup}>
-													<input
-														type="email"
-														name="email"
-														placeholder=" "
-														required
-														value={formData.email}
-														onChange={handleInputChange}
-													/>
-													<label>Email</label>
-												</div>
-
-												<button type="submit" className={styles.submitBtn}>
-													ПІДТВЕРДИТИ БРОНЮВАННЯ
-												</button>
-											</form>
 										</div>
 									)}
 								</>

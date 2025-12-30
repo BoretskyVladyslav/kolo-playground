@@ -1,43 +1,59 @@
 import { NextResponse } from 'next/server';
-import { generateSignature } from '@/lib/wayforpay';
+import { createClient } from '@supabase/supabase-js';
+import { verifySignature, generateResponseSignature } from '@/lib/wayforpay';
+
+const supabase = createClient(
+	process.env.NEXT_PUBLIC_SUPABASE_URL!,
+	process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: Request) {
-    try {
-        const body = await req.json();
-        const { amount, productName, orderReference } = body;
+	try {
+		const text = await req.text();
+		let data;
 
-        const orderDate = Date.now();
-        const ref = orderReference || `ORDER_${orderDate}`;
-        const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
+		try {
+			data = JSON.parse(text);
+		} catch {
+			const params = new URLSearchParams(text);
+			data = Object.fromEntries(params);
+		}
 
-        const data = {
-            orderReference: ref,
-            orderDate,
-            amount,
-            currency: 'UAH',
-            productName: [productName],
-            productCount: [1],
-            productPrice: [amount],
-            serviceUrl: `${baseUrl}/api/payment/callback`,
-        };
+		const signature = data.merchantSignature;
+		if (!signature) {
+			return NextResponse.json({ error: 'No signature provided' }, { status: 400 });
+		}
 
-        const signature = generateSignature({
-            orderReference: ref,
-            orderDate,
-            amount,
-            productName: data.productName,
-            productCount: data.productCount,
-            productPrice: data.productPrice
-        });
+		const isValid = verifySignature(data, signature);
+		if (!isValid) {
+			return NextResponse.json({ error: 'Signature mismatch' }, { status: 400 });
+		}
 
-        return NextResponse.json({
-            ...data,
-            merchantAccount: process.env.WAYFORPAY_MERCHANT_ACCOUNT,
-            merchantDomainName: process.env.NEXT_PUBLIC_DOMAIN,
-            signature
-        });
+		const { orderReference, transactionStatus } = data;
+		const bookingId = orderReference.includes('_') ? orderReference.split('_')[1] : orderReference;
+		const time = Date.now();
 
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to create payment' }, { status: 500 });
-    }
+		if (transactionStatus === 'Approved') {
+			const { error } = await supabase
+				.from('bookings')
+				.update({ status: 'paid' })
+				.eq('id', bookingId);
+
+			if (error) {
+				return NextResponse.json({ status: 'error', message: 'DB Update failed' }, { status: 500 });
+			}
+		}
+
+		const responseSignature = generateResponseSignature(orderReference, 'accept', time);
+
+		return NextResponse.json({
+			orderReference,
+			status: 'accept',
+			time,
+			signature: responseSignature
+		});
+
+	} catch (error) {
+		return NextResponse.json({ status: 'error' }, { status: 500 });
+	}
 }

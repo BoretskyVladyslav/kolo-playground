@@ -13,17 +13,16 @@ export async function POST(req: Request) {
         const ref = orderReference || `ORDER_${orderDate}`;
         const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000';
 
-        const data = {
-            orderReference: ref,
-            orderDate,
-            amount, // Тут тепер реальна сума (наприклад 1600)
-            currency: 'UAH',
-            productName: [productName],
-            productCount: [1],
-            productPrice: [amount],
-            serviceUrl: `${baseUrl}/api/payment/callback`,
-        };
-
+const data = {
+    orderReference: ref,
+    orderDate,
+    amount: 1, // <--- ТИМЧАСОВО СТАВИМО 1 ГРН (замість змінної amount)
+    currency: 'UAH',
+    productName: [productName],
+    productCount: [1],
+    productPrice: [1], // <--- ТУТ ТЕЖ 1 ГРН
+    serviceUrl: `${baseUrl}/api/payment/callback`,
+};
         const signature = generateSignature({
             orderReference: ref,
             orderDate,
