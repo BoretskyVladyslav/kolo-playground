@@ -18,7 +18,7 @@ export async function sendBooking(prevState, formData) {
     }
 
     // const price = Number(guests) * 400;
-    const price = 1;
+    const price = 10;
     try {
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
