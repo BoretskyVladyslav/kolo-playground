@@ -17,8 +17,10 @@ export async function sendBooking(prevState, formData) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
     }
 
-    // const price = Number(guests) * 400;
-    const price = 10;
+    // 👇 ТУТ МИ ЗМІНИЛИ ЦІНУ НА 10 ГРН ДЛЯ ТЕСТУ
+    // const price = Number(guests) * 400; // Стара формула (вимкнена)
+    const price = 10; // 🔥 Тестова ціна
+
     try {
         await resend.emails.send({
             from: 'Kolo Playground <info@koloplayground.com>',
