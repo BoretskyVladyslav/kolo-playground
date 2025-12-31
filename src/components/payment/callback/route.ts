@@ -1,53 +1,51 @@
-import { createClient } from '@supabase/supabase-js';
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
-
-// 👇 Твій ключ (hardcoded)
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vbGZvaWt0amJuaGV2ZnV4bnV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDY1MTksImV4cCI6MjA3NTQ4MjUxOX0.NCo4q-cGu-kkqELosPGZv6WEJU_iwOArJRG4sz_Jt_c';
-
-// Створюємо клієнта з цим ключем
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    SUPABASE_KEY
-);
+import { verifySignature, generateResponseSignature } from '@/lib/wayforpay';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export async function POST(req: Request) {
-    try {
-        const text = await req.text();
-        let body;
+	try {
+		const text = await req.text();
+		if (!text) return NextResponse.json({ error: 'Empty body' }, { status: 400 });
 
-        try {
-            body = JSON.parse(text);
-        } catch {
-            const params = new URLSearchParams(text);
-            body = Object.fromEntries(params);
-        }
+		let data;
+		try {
+			data = JSON.parse(text);
+		} catch (e) {
+			return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+		}
 
-        console.log('Callback Hit:', body.orderReference, body.transactionStatus);
+		const signature = data.merchantSignature;
+		const isValid = verifySignature(data, signature);
 
-        const { orderReference, transactionStatus } = body;
+		if (!isValid) {
+			return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
+		}
 
-        if (transactionStatus === 'Approved') {
-            const { error } = await supabase
-                .from('bookings')
-                .update({ status: 'paid' })
-                .eq('id', orderReference);
+		if (data.transactionStatus === 'Approved') {
+			const { error } = await supabaseAdmin
+				.from('bookings')
+				.update({ status: 'paid' })
+				.eq('id', data.orderReference);
+			
+			if (error) {
+				console.error('Supabase Update Error:', error);
+			}
+		}
 
-            if (error) {
-                console.error('Supabase Update Error:', error);
-            } else {
-                console.log('Successfully updated to PAID:', orderReference);
-            }
-        }
+		const time = Date.now();
+		const responseSignature = generateResponseSignature(data.orderReference, 'accept', time);
 
-        return NextResponse.json({
-            orderReference,
-            status: 'accept',
-            time: Date.now(),
-            signature: ''
-        });
+		return NextResponse.json({
+			orderReference: data.orderReference,
+			status: 'accept',
+			time,
+			signature: responseSignature
+		});
 
-    } catch (error) {
-        console.error('Server Error:', error);
-        return NextResponse.json({ status: 'error' }, { status: 500 });
-    }
+	} catch (error) {
+		console.error('Callback Error:', error);
+		return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+	}
 }

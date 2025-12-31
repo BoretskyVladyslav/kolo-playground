@@ -245,7 +245,7 @@ export const Booking = () => {
 				body: JSON.stringify({ 
 					amount, 
 					productName,
-					orderReference: currentOrderId ? `BOOKING_${currentOrderId}` : undefined
+					orderReference: currentOrderId || undefined
 				}),
 			});
 			
