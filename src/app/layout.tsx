@@ -32,6 +32,9 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    // Використовуємо змінну середовища або фолбек (про всяк випадок)
+    const gaId = process.env.NEXT_PUBLIC_GA_ID || 'G-XN63SY65Z6';
+
     return (
         <html lang="uk" className={inter.variable}>
             <head>
@@ -63,7 +66,8 @@ export default function RootLayout({
                 <SmoothScroll>
                     {children}
                 </SmoothScroll>
-                <GoogleAnalytics gaId="G-XN63SY65Z6" />
+                {/* 👇 Тепер тут змінна, яку ми задали у Vercel */}
+                <GoogleAnalytics gaId={gaId} />
             </body>
         </html>
     );
