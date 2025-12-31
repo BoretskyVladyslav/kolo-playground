@@ -1,0 +1,130 @@
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  background: rgba(13, 27, 64, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  animation: fadeIn 0.5s ease-out;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 767.5px) {
+  .container {
+    padding: 20px;
+  }
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header .iconWrapper {
+  width: 60px;
+  height: 60px;
+  background: rgba(212, 255, 0, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  color: #d4ff00;
+  box-shadow: 0 0 20px rgba(212, 255, 0, 0.2);
+}
+.header h3 {
+  font-size: 24px;
+  color: white;
+  margin-bottom: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.header p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.details {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: white;
+}
+.row span:first-child {
+  color: rgba(255, 255, 255, 0.5);
+}
+.row:last-child {
+  margin-bottom: 0;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 15px 0;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+.total .price {
+  font-size: 24px;
+  color: #d4ff00;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.backBtn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+}
+.backBtn:hover {
+  border-color: white;
+  color: white;
+}
+
+.secureText {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.3);
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}/*# sourceMappingURL=PaymentSummary.module.css.map */

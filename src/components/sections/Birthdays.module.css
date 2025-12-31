@@ -1,0 +1,200 @@
+@keyframes floatStar {
+  0%, 100% {
+    transform: translateY(0) rotate(10deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(-5deg);
+  }
+}
+.birthdays {
+  position: relative;
+  padding: 180px 0;
+  background: transparent;
+  color: #ffffff;
+  overflow: hidden;
+}
+@media (max-width: 767.5px) {
+  .birthdays {
+    padding: 80px 0;
+  }
+}
+.birthdays__container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+}
+.birthdays__header {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 150px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__header {
+    margin-bottom: 60px;
+  }
+}
+.birthdays__title {
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.birthdays__index {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  opacity: 0.4;
+  color: #d4ff00;
+  font-family: monospace;
+}
+@media (max-width: 767.5px) {
+  .birthdays__index {
+    display: none;
+  }
+}
+.birthdays__content {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 100px;
+}
+@media (min-width: 768px) and (max-width: 1023.5px) {
+  .birthdays__content {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+}
+@media (max-width: 767.5px) {
+  .birthdays__content {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+}
+.birthdays__sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.birthdays__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__intro {
+    gap: 30px;
+  }
+}
+.birthdays__text {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-transform: uppercase;
+  max-width: 450px;
+  color: rgba(255, 255, 255, 0.9);
+}
+@media (max-width: 767.5px) {
+  .birthdays__text {
+    font-size: 20px;
+  }
+}
+.birthdays__highlight {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #d4ff00;
+  max-width: 500px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__highlight {
+    font-size: 18px;
+  }
+}
+.birthdays__starWrapper {
+  margin-top: 150px;
+}
+@media (min-width: 768px) and (max-width: 1023.5px) {
+  .birthdays__starWrapper {
+    display: none;
+  }
+}
+@media (max-width: 767.5px) {
+  .birthdays__starWrapper {
+    display: none;
+  }
+}
+.birthdays__star {
+  width: 120px;
+  height: 120px;
+  -o-object-fit: contain;
+     object-fit: contain;
+  animation: floatStar 7s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(212, 255, 0, 0.6));
+}
+.birthdays__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding-top: 20px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__timeline {
+    gap: 40px;
+    padding-top: 0;
+  }
+}
+.birthdays__step {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+@media (max-width: 767.5px) {
+  .birthdays__step {
+    gap: 20px;
+  }
+}
+.birthdays__stepNumber {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 0.8;
+  color: rgba(255, 255, 255, 0.1);
+  font-family: inherit;
+  min-width: 90px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__stepNumber {
+    font-size: 40px;
+    min-width: 60px;
+  }
+}
+.birthdays__stepContent {
+  padding-top: 5px;
+}
+.birthdays__stepTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+@media (max-width: 767.5px) {
+  .birthdays__stepTitle {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+}
+.birthdays__stepDesc {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 500px;
+}
+@media (max-width: 767.5px) {
+  .birthdays__stepDesc {
+    font-size: 16px;
+  }
+}/*# sourceMappingURL=Birthdays.module.css.map */
