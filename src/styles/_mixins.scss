@@ -1,37 +1,43 @@
-@use "./variables" as *;
+@use "@/styles/variables" as *;
 
 @mixin mobile {
-    @media (max-width: #{$bp-tablet - 0.5px}) {
-        @content;
-    }
+	@media (max-width: #{$bp-tablet - 0.5px}) {
+		@content;
+	}
 }
 
 @mixin tablet {
-    @media (min-width: #{$bp-tablet}) and (max-width: #{$bp-desktop - 0.5px}) {
-        @content;
-    }
+	@media (min-width: #{$bp-tablet}) and (max-width: #{$bp-desktop - 0.5px}) {
+		@content;
+	}
 }
 
 @mixin tablet-down {
-    @media (max-width: #{$bp-desktop - 0.5px}) {
-        @content;
-    }
+	@media (max-width: #{$bp-desktop - 0.5px}) {
+		@content;
+	}
 }
 
 @mixin desktop {
-    @media (min-width: $bp-desktop) {
-        @content;
-    }
+	@media (min-width: $bp-desktop) {
+		@content;
+	}
 }
 
 @mixin flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 @mixin flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+@mixin container {
+	max-width: $container-width;
+	margin: 0 auto;
+	padding: 0 $gutter;
 }

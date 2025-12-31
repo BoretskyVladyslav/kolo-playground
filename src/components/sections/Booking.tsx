@@ -267,7 +267,9 @@ export const Booking = () => {
 				'productCount[]': data.productCount[0],
 				'productPrice[]': data.productPrice[0],
 				merchantSignature: data.signature,
-				language: 'UA'
+				language: 'UA',
+				serviceUrl: data.serviceUrl,
+				returnUrl: data.returnUrl
 			};
 
 			Object.entries(fields).forEach(([key, value]) => {
@@ -472,67 +474,61 @@ export const Booking = () => {
 
 									{selectedTime && (
 										<div className={styles.booking__formContainer}>
-											<div className={styles.booking__summary}>
-												<h3>Ваше бронювання</h3>
-												<ul className={styles.summaryList}>
-													<li>
-														<span>Місто:</span> {city === '1' ? 'Київ' : 'Інше'}
-													</li>
-													<li>
-														<span>Дата:</span> {formattedDate}
-													</li>
-													<li>
-														<span>Час:</span> {selectedTime}
-													</li>
-													<li>
-														<span>Людей:</span> {guests}
-													</li>
-													<li className={styles.highlight}>
-														<span>Тривалість:</span> 120 хв
-													</li>
-													<li className={styles.highlight}>
-														<span>До сплати:</span> <span className={styles.price}>{Number(guests) * PRICE_PER_PERSON} грн</span>
-													</li>
-												</ul>
-
-												<form onSubmit={handleSubmit} className={styles.booking__form}>
-													<div className={styles.inputGroup}>
-														<input
-															type="text"
-															name="name"
-															placeholder=" "
-															required
-															value={formData.name}
-															onChange={handleInputChange}
-														/>
-														<label>Ваше повне ім'я</label>
+											<div className={styles.booking__formGrid}>
+												<div className={styles.summaryColumn}>
+													<h3>Ваше бронювання</h3>
+													<div className={styles.summaryRow}>
+														<span className={styles.label}>Місто:</span>
+														<span className={styles.value}>{city === '1' ? 'Київ' : 'Інше'}</span>
 													</div>
-
-													<div className={styles.inputGroup}>
-														<input
-															type="tel"
-															name="phone"
-															placeholder=" "
-															required
-															value={formData.phone}
-															onChange={handleInputChange}
-															title="Введіть телефон, наприклад 0501234567"
-														/>
-														<label>Номер телефону</label>
+													<div className={styles.summaryRow}>
+														<span className={styles.label}>Дата:</span>
+														<span className={styles.value}>{formattedDate}</span>
 													</div>
-
-													<div className={styles.inputGroup}>
-														<input
-															type="email"
-															name="email"
-															placeholder=" "
-															required
-															value={formData.email}
-															onChange={handleInputChange}
-														/>
-														<label>Email</label>
+													<div className={styles.summaryRow}>
+														<span className={styles.label}>Час:</span>
+														<span className={styles.value}>{selectedTime}</span>
 													</div>
+													<div className={styles.summaryRow}>
+														<span className={styles.label}>Людей:</span>
+														<span className={styles.value}>{guests}</span>
+													</div>
+													<div className={styles.summaryRow}>
+														<span className={styles.labelHighlight}>Тривалість:</span>
+														<span className={styles.valueHighlight}>120 хв</span>
+													</div>
+													<div className={styles.summaryRow}>
+														<span className={styles.labelHighlight}>До сплати:</span>
+														<span className={styles.price}>{Number(guests) * PRICE_PER_PERSON} грн</span>
+													</div>
+												</div>
 
+												<form onSubmit={handleSubmit} className={styles.formColumn}>
+													<input
+														type="text"
+														name="name"
+														placeholder="Ваше повне ім'я"
+														required
+														value={formData.name}
+														onChange={handleInputChange}
+													/>
+													<input
+														type="tel"
+														name="phone"
+														placeholder="Номер телефону"
+														required
+														value={formData.phone}
+														onChange={handleInputChange}
+														title="Введіть телефон, наприклад 0501234567"
+													/>
+													<input
+														type="email"
+														name="email"
+														placeholder="Email"
+														required
+														value={formData.email}
+														onChange={handleInputChange}
+													/>
 													<button type="submit" className={styles.submitBtn}>
 														ПІДТВЕРДИТИ БРОНЮВАННЯ
 													</button>
