@@ -6,10 +6,12 @@ import { generateSignature } from '@/lib/wayforpay';
 export async function POST(req: Request) {
 	try {
 		const body = await req.json();
-		const { amount, productName, orderReference } = body;
+		const { productName, orderReference } = body;
 
 		const merchantAccount = process.env.WAYFORPAY_MERCHANT_ACCOUNT?.trim();
 		if (!merchantAccount) throw new Error('Merchant Account is missing');
+
+		const amount = 1; // ТЕСТОВА ЦІНА 1 ГРН
 
 		const cleanDomain = 'https://www.koloplayground.com';
 		
@@ -19,22 +21,20 @@ export async function POST(req: Request) {
 		const data = {
 			orderReference: ref,
 			orderDate,
-			amount: Number(amount),
+			amount: amount,
 			currency: 'UAH',
 			productName: [productName],
 			productCount: [1],
-			productPrice: [Number(amount)],
+			productPrice: [amount],
 			merchantDomainName: cleanDomain,
-			// 👇 КУДИ СТУКАЄ РОБОТ (щоб оновити базу)
 			serviceUrl: `${cleanDomain}/api/payment/callback`,
-			// 👇 КУДИ ЙДЕ ЛЮДИНА (щоб побачити "Дякую")
 			returnUrl: `${cleanDomain}/?payment=success`,
 		};
 
 		const signature = generateSignature({
 			orderReference: ref,
 			orderDate,
-			amount: Number(amount),
+			amount: amount,
 			productName: data.productName,
 			productCount: data.productCount,
 			productPrice: data.productPrice,
@@ -51,5 +51,5 @@ export async function POST(req: Request) {
 	} catch (error) {
 		console.error('Payment Create Error:', error);
 		return NextResponse.json({ error: 'Failed to create payment' }, { status: 500 });
-    }
+	}
 }
