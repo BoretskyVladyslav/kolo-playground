@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
@@ -20,6 +20,7 @@ export async function sendBooking(prevState, formData) {
     const date = formData.get('date');
     const time = formData.get('time');
     const guests = formData.get('guests');
+    const city = formData.get('city');
 
     if (!name || !phone || !email) {
         return { success: false, message: 'Заповніть обов\'язкові поля' };
@@ -29,7 +30,7 @@ export async function sendBooking(prevState, formData) {
 
     try {
         await resend.emails.send({
-            from: 'Kolo Playground <info@koloplayground.com>',
+            from: 'Kolo Playground <onboarding@resend.dev>',
             to: [email],
             subject: `🟡 Заявку прийнято! Очікуємо оплати`,
             html: `
@@ -48,13 +49,15 @@ export async function sendBooking(prevState, formData) {
         });
 
         await resend.emails.send({
-            from: 'Kolo Admin <info@koloplayground.com>',
-            to: ['kolo.playground@gmail.com'],
+            from: 'Kolo Admin <onboarding@resend.dev>',
+            to: ['kolo.playground@gmail.com'], 
             subject: `🆕 Нове бронювання: ${name}`,
             html: `
                 <div>
                     <h2>Нова заявка (Очікує оплати)</h2>
                     <p><strong>Клієнт:</strong> ${name}, ${phone}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Місто:</strong> ${city}</p>
                     <p><strong>Дата:</strong> ${date} на ${time}</p>
                     <p><strong>Сума:</strong> ${price} грн</p>
                 </div>
@@ -63,7 +66,7 @@ export async function sendBooking(prevState, formData) {
 
         return { success: true, message: 'Заявку створено!' };
     } catch (error) {
-        console.error(error);
+        console.error('Email Error:', error);
         return { success: false, message: 'Помилка відправки' };
     }
 }
@@ -71,12 +74,11 @@ export async function sendBooking(prevState, formData) {
 export async function sendFranchise(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
-    const email = formData.get('email');
     const message = formData.get('message');
 
     try {
         await resend.emails.send({
-            from: 'Kolo Franchise <info@koloplayground.com>',
+            from: 'Kolo Franchise <onboarding@resend.dev>',
             to: ['kolo.playground@gmail.com'],
             subject: `💼 Франшиза: ${name}`,
             html: `<p>Ім'я: ${name}</p><p>Тел: ${phone}</p><p>${message}</p>`
@@ -90,12 +92,11 @@ export async function sendFranchise(prevState, formData) {
 export async function sendContact(prevState, formData) {
     const name = formData.get('name');
     const phone = formData.get('phone');
-    const email = formData.get('email');
     const message = formData.get('message');
 
     try {
         await resend.emails.send({
-            from: 'Kolo Contact <info@koloplayground.com>',
+            from: 'Kolo Contact <onboarding@resend.dev>',
             to: ['kolo.playground@gmail.com'],
             subject: `💬 Питання: ${name}`,
             html: `<p>Ім'я: ${name}</p><p>Тел: ${phone}</p><p>${message}</p>`
