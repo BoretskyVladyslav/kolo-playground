@@ -114,7 +114,7 @@ export default function AdminPage() {
     const deleteBooking = async (id: number) => {
         if (!confirm('Ви впевнені, що хочете видалити це бронювання?')) return;
         try {
-            const res = await deleteBookingAction(id);
+            const res = await deleteBookingAction(String(id));
             if (!res.success) throw new Error(res.message);
             loadBookings(); 
         } catch (error) {
