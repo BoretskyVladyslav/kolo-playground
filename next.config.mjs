@@ -6,11 +6,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Додаємо ігнорування помилок Sass (якщо версія дозволяє)
-  sassOptions: {
-    quietDeps: true,
-    silenceDeprecations: ['color-functions', 'import'],
-  },
 };
 
 export default nextConfig;

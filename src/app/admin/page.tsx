@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-// @ts-ignore
 import { deleteBooking as deleteBookingAction, updateBookingStatus } from '@/app/actions';
 import styles from './admin.module.scss';
 
@@ -126,7 +125,7 @@ export default function AdminPage() {
     const markAsPaid = async (id: number) => {
         if (!confirm('Підтвердити оплату для цього замовлення?')) return;
         try {
-            const res = await updateBookingStatus(id, 'paid');
+            const res = await updateBookingStatus(String(id), 'paid');
             if (!res.success) throw new Error(res.message);
             loadBookings();
         } catch (error) {
