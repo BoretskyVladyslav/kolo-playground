@@ -36,14 +36,14 @@ export const Booking = () => {
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(false);
     const [paymentLoading, setPaymentLoading] = useState(false);
-    
+
     const [city, setCity] = useState('1');
     const [guests, setGuests] = useState('2');
     const [date, setDate] = useState<Date | null>(new Date());
-    
+
     const [slots, setSlots] = useState<TimeSlot[]>([]);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
-    
+
     const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
@@ -63,7 +63,7 @@ export const Booking = () => {
 
         try {
             const dateStr = date.toLocaleDateString('en-CA');
-            
+
             const { data: bookings, error } = await supabase
                 .from('bookings')
                 .select('*')
@@ -74,10 +74,10 @@ export const Booking = () => {
 
             const generatedSlots: TimeSlot[] = [];
             const now = new Date();
-            const isToday = date.getDate() === now.getDate() && 
-                            date.getMonth() === now.getMonth() && 
-                            date.getFullYear() === now.getFullYear();
-            
+            const isToday = date.getDate() === now.getDate() &&
+                date.getMonth() === now.getMonth() &&
+                date.getFullYear() === now.getFullYear();
+
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
             for (let hour = START_HOUR; hour <= END_HOUR; hour++) {
@@ -89,7 +89,7 @@ export const Booking = () => {
                     const slotEndMinutes = slotStartMinutes + VISIT_DURATION;
 
                     if (isToday && slotStartMinutes < currentMinutes + 30) {
-                         continue; 
+                        continue;
                     }
 
                     let maxOccupancy = 0;
@@ -98,16 +98,16 @@ export const Booking = () => {
                         let currentOccupancyAtPoint = 0;
 
                         bookings?.forEach((b) => {
-                             const bStart = getMinutesFromMidnight(b.start_time);
-                             const bEnd = getMinutesFromMidnight(b.end_time); 
+                            const bStart = getMinutesFromMidnight(b.start_time);
+                            const bEnd = getMinutesFromMidnight(b.end_time);
 
-                             if (checkTime >= bStart && checkTime < bEnd) {
-                                 currentOccupancyAtPoint += b.number_of_people;
-                             }
+                            if (checkTime >= bStart && checkTime < bEnd) {
+                                currentOccupancyAtPoint += b.number_of_people;
+                            }
                         });
-                        
+
                         if (currentOccupancyAtPoint > maxOccupancy) {
-                                maxOccupancy = currentOccupancyAtPoint;
+                            maxOccupancy = currentOccupancyAtPoint;
                         }
                     }
 
@@ -138,11 +138,11 @@ export const Booking = () => {
 
     const formattedDate = date
         ? date.toLocaleDateString('uk-UA', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-            })
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        })
         : '';
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -150,18 +150,18 @@ export const Booking = () => {
         if (!date || !selectedTime) return;
 
         const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, "");
-        if(cleanPhone.length < 10) {
-                alert("Будь ласка, введіть коректний номер телефону");
-                return;
+        if (cleanPhone.length < 10) {
+            alert("Будь ласка, введіть коректний номер телефону");
+            return;
         }
 
         try {
             const dateStr = date.toLocaleDateString('en-CA');
-            
+
             const [h, m] = selectedTime.split(':').map(Number);
             const startMinutes = h * 60 + m;
             const endMinutes = startMinutes + VISIT_DURATION;
-            
+
             const endH = Math.floor(endMinutes / 60);
             const endM = endMinutes % 60;
             const endTimeStr = `${endH}:${endM === 0 ? '00' : '30'}`;
@@ -170,7 +170,7 @@ export const Booking = () => {
                 city_id: parseInt(city),
                 date: dateStr,
                 start_time: selectedTime,
-                end_time: endTimeStr, 
+                end_time: endTimeStr,
                 number_of_people: parseInt(guests),
                 customer_name: formData.name,
                 customer_phone: formData.phone,
@@ -185,9 +185,9 @@ export const Booking = () => {
                 .single();
 
             if (error) throw error;
-            
+
             if (data) {
-                setCurrentOrderId(data.id); 
+                setCurrentOrderId(data.id);
             }
 
             if (typeof window !== 'undefined' && window.fbq) {
@@ -195,6 +195,19 @@ export const Booking = () => {
                     content_name: 'Booking',
                     value: Number(guests) * PRICE_PER_PERSON,
                     currency: 'UAH'
+                });
+            }
+
+            // Google Tag Manager - Booking Success Event
+            if (typeof window !== 'undefined') {
+                const { sendGTMEvent } = await import('@next/third-parties/google');
+                sendGTMEvent({
+                    event: 'booking_success',
+                    city: city === '1' ? 'Київ' : 'Інше',
+                    guests: Number(guests),
+                    value: Number(guests) * PRICE_PER_PERSON,
+                    currency: 'UAH',
+                    order_id: data?.id || 'unknown'
                 });
             }
 
@@ -206,7 +219,7 @@ export const Booking = () => {
             emailData.append('date', formattedDate);
             emailData.append('time', `${selectedTime} - ${endTimeStr}`);
             emailData.append('guests', guests);
-            
+
             await sendBooking(null, emailData);
 
             if (document.activeElement instanceof HTMLElement) {
@@ -237,23 +250,23 @@ export const Booking = () => {
             const amount = Number(guests) * PRICE_PER_PERSON;
             const dateStr = date.toLocaleDateString('uk-UA');
             const productName = `Бронювання KOLO: ${dateStr}, ${selectedTime}, ${guests} люд.`;
-            
+
             const res = await fetch('/api/payment/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    amount, 
+                body: JSON.stringify({
+                    amount,
                     productName,
                     orderReference: currentOrderId || undefined
                 }),
             });
-            
+
             const data = await res.json();
 
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = 'https://secure.wayforpay.com/pay';
-            
+
             const fields = {
                 merchantAccount: data.merchantAccount,
                 merchantAuthType: 'SimpleSignature',
@@ -364,7 +377,7 @@ export const Booking = () => {
                                 <span className={styles.value}>120 хв</span>
                             </div>
                         </div>
-                        
+
                         <div className={styles.divider} />
 
                         <div className={styles.infoItem}>
@@ -437,37 +450,36 @@ export const Booking = () => {
                                     <div className={styles.booking__notice}>
                                         <AlertCircle className={styles.noticeIcon} size={24} />
                                         <p>
-                                            <strong>Максимум 15 людей одночасно. Всі бронювання на 2 години.</strong> <br/>
-                                            Оберіть місто, кількість гостей та дату, щоб побачити доступні слоти. 
+                                            <strong>Максимум 15 людей одночасно. Всі бронювання на 2 години.</strong> <br />
+                                            Оберіть місто, кількість гостей та дату, щоб побачити доступні слоти.
                                             Бронювання 30-хвилинними інтервалами з 11:00 до 20:00.
                                         </p>
                                     </div>
 
                                     <div className={styles.booking__slots}>
                                         {loading ? (
-                                            <div style={{color: 'white', gridColumn: '1/-1', textAlign: 'center'}}>Завантаження слотів...</div>
+                                            <div style={{ color: 'white', gridColumn: '1/-1', textAlign: 'center' }}>Завантаження слотів...</div>
                                         ) : slots.length > 0 ? (
-                                                slots.map(slot => (
-                                                        <button
-                                                            key={slot.time}
-                                                            disabled={!slot.available}
-                                                            onClick={() => setSelectedTime(slot.time)}
-                                                            className={`${styles.slotBtn} ${
-                                                                selectedTime === slot.time ? styles.active : ''
-                                                            }`}
-                                                        >
-                                                            <span className={styles.time}>{slot.time}</span>
-                                                            <span className={styles.seats} style={{
-                                                                color: slot.available ? 'rgba(255,255,255,0.7)' : '#ff4444'
-                                                            }}>
-                                                                            {slot.available 
-                                                                                    ? `Вільно: ${slot.remaining} з ${MAX_CAPACITY}` 
-                                                                                    : 'Місць немає'}
-                                                            </span>
-                                                        </button>
-                                                ))
+                                            slots.map(slot => (
+                                                <button
+                                                    key={slot.time}
+                                                    disabled={!slot.available}
+                                                    onClick={() => setSelectedTime(slot.time)}
+                                                    className={`${styles.slotBtn} ${selectedTime === slot.time ? styles.active : ''
+                                                        }`}
+                                                >
+                                                    <span className={styles.time}>{slot.time}</span>
+                                                    <span className={styles.seats} style={{
+                                                        color: slot.available ? 'rgba(255,255,255,0.7)' : '#ff4444'
+                                                    }}>
+                                                        {slot.available
+                                                            ? `Вільно: ${slot.remaining} з ${MAX_CAPACITY}`
+                                                            : 'Місць немає'}
+                                                    </span>
+                                                </button>
+                                            ))
                                         ) : (
-                                                <div style={{color: 'white', gridColumn: '1/-1', textAlign: 'center'}}>На цю дату немає доступних слотів</div>
+                                            <div style={{ color: 'white', gridColumn: '1/-1', textAlign: 'center' }}>На цю дату немає доступних слотів</div>
                                         )}
                                     </div>
 
@@ -537,7 +549,7 @@ export const Booking = () => {
                                     )}
                                 </>
                             ) : (
-                                <PaymentSummary 
+                                <PaymentSummary
                                     details={{
                                         date: formattedDate,
                                         time: selectedTime || '',

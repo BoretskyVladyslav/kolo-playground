@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 import { SmoothScroll } from "../components/providers/SmoothScroll";
+import { GTMPageTracker } from "../components/GTMPageTracker";
+import { Suspense } from "react";
 import "./globals.scss";
 
 const inter = Inter({
@@ -32,12 +34,26 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    // Використовуємо змінну середовища або фолбек (про всяк випадок)
-    const gaId = process.env.NEXT_PUBLIC_GA_ID || 'G-XN63SY65Z6';
+    // В якості фолбеку ставимо фінальний GTM
+    const gtmId = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-KCB7NCH8';
 
     return (
         <html lang="uk" className={inter.variable}>
             <head>
+                {/* Default Consent Mode v2 Settings */}
+                <Script id="gtm-consent-mode" strategy="beforeInteractive">
+                    {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('consent', 'default', {
+                            'ad_storage': 'denied',
+                            'ad_user_data': 'denied',
+                            'ad_personalization': 'denied',
+                            'analytics_storage': 'denied',
+                        });
+                    `}
+                </Script>
+
                 <Script id="fb-pixel" strategy="afterInteractive">
                     {`
                         !function(f,b,e,v,n,t,s)
@@ -53,9 +69,9 @@ export default function RootLayout({
                     `}
                 </Script>
                 <noscript>
-                    <img 
-                        height="1" 
-                        width="1" 
+                    <img
+                        height="1"
+                        width="1"
                         style={{ display: 'none' }}
                         src="https://www.facebook.com/tr?id=1972061640213690&ev=PageView&noscript=1"
                         alt=""
@@ -63,11 +79,16 @@ export default function RootLayout({
                 </noscript>
             </head>
             <body>
+                <Suspense fallback={null}>
+                    <GTMPageTracker />
+                </Suspense>
+
                 <SmoothScroll>
                     {children}
                 </SmoothScroll>
-                {/* 👇 Тепер тут змінна, яку ми задали у Vercel */}
-                <GoogleAnalytics gaId={gaId} />
+
+                {/* Google Tag Manager Component */}
+                <GoogleTagManager gtmId={gtmId} />
             </body>
         </html>
     );
