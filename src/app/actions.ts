@@ -34,7 +34,7 @@ export async function sendBooking(prevState: any, formData: FormData) {
     // --- ЛИСТ КЛІЄНТУ (Стиль: Яскравий, Жовтий, Playful) ---
     try {
         await resend.emails.send({
-            from: 'Kolo Playground <onboarding@resend.dev>',
+            from: 'Kolo Playground <info@koloplayground.com>',
             to: [email],
             replyTo: REPLY_TO_EMAIL,
             subject: `🟡 Твоя гра вже скоро! Заявку прийнято`,
@@ -69,7 +69,7 @@ export async function sendBooking(prevState: any, formData: FormData) {
     // --- ЛИСТ АДМІНУ (Стиль: Чіткий, Інформативний, Зелений акцент) ---
     try {
         await resend.emails.send({
-            from: 'Kolo Admin <onboarding@resend.dev>',
+            from: 'Kolo Playground <info@koloplayground.com>',
             to: [RECIPIENT_EMAIL],
             replyTo: REPLY_TO_EMAIL,
             subject: `✅ Нове бронювання: ${price} грн (${name})`,
@@ -124,7 +124,7 @@ export async function sendFranchise(prevState: any, formData: FormData) {
     // --- ЛИСТ ФРАНШИЗА (Стиль: Діловий, Строгий, Темно-синій) ---
     try {
         await resend.emails.send({
-            from: 'Kolo Franchise <onboarding@resend.dev>',
+            from: 'Kolo Playground <info@koloplayground.com>',
             to: [RECIPIENT_EMAIL],
             replyTo: REPLY_TO_EMAIL,
             subject: `💼 ПАРТНЕРСТВО: Запит від ${name}`,
@@ -162,7 +162,7 @@ export async function sendContact(prevState: any, formData: FormData) {
     // --- ЛИСТ КОНТАКТИ (Стиль: Нейтральний, Сірий) ---
     try {
         await resend.emails.send({
-            from: 'Kolo Contact <onboarding@resend.dev>',
+            from: 'Kolo Playground <info@koloplayground.com>',
             to: [RECIPIENT_EMAIL],
             replyTo: REPLY_TO_EMAIL,
             subject: `💬 Питання з сайту: ${name}`,
