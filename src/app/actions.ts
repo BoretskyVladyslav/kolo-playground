@@ -3,7 +3,7 @@
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
-const RECIPIENT_EMAIL = process.env.RESEND_RECIPIENT!;
+const RECIPIENT_EMAIL = process.env.RESEND_RECIPIENT || 'kolo.playground@gmail.com';
 const REPLY_TO_EMAIL = process.env.RESEND_REPLY_TO;
 
 const getSupabaseAdmin = () => {
