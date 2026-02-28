@@ -3,7 +3,8 @@
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
-const ADMIN_EMAIL = 'boretskyvladyslav@gmail.com';
+const RECIPIENT_EMAIL = process.env.RESEND_RECIPIENT!;
+const REPLY_TO_EMAIL = process.env.RESEND_REPLY_TO;
 
 const getSupabaseAdmin = () => {
     return createClient(
@@ -15,7 +16,7 @@ const getSupabaseAdmin = () => {
 
 export async function sendBooking(prevState: any, formData: FormData) {
     const resend = new Resend(process.env.RESEND_API_KEY);
-    
+
     const name = formData.get('name') as string;
     const phone = formData.get('phone') as string;
     const email = formData.get('email') as string;
@@ -35,6 +36,7 @@ export async function sendBooking(prevState: any, formData: FormData) {
         await resend.emails.send({
             from: 'Kolo Playground <onboarding@resend.dev>',
             to: [email],
+            replyTo: REPLY_TO_EMAIL,
             subject: `🟡 Твоя гра вже скоро! Заявку прийнято`,
             html: `
                 <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #fefce8; padding: 40px; border-radius: 12px; max-width: 600px; margin: 0 auto; color: #333;">
@@ -68,7 +70,8 @@ export async function sendBooking(prevState: any, formData: FormData) {
     try {
         await resend.emails.send({
             from: 'Kolo Admin <onboarding@resend.dev>',
-            to: [ADMIN_EMAIL],
+            to: [RECIPIENT_EMAIL],
+            replyTo: REPLY_TO_EMAIL,
             subject: `✅ Нове бронювання: ${price} грн (${name})`,
             html: `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden;">
@@ -122,7 +125,8 @@ export async function sendFranchise(prevState: any, formData: FormData) {
     try {
         await resend.emails.send({
             from: 'Kolo Franchise <onboarding@resend.dev>',
-            to: [ADMIN_EMAIL],
+            to: [RECIPIENT_EMAIL],
+            replyTo: REPLY_TO_EMAIL,
             subject: `💼 ПАРТНЕРСТВО: Запит від ${name}`,
             html: `
                 <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; border-top: 5px solid #1e3a8a; padding-top: 20px;">
@@ -159,7 +163,8 @@ export async function sendContact(prevState: any, formData: FormData) {
     try {
         await resend.emails.send({
             from: 'Kolo Contact <onboarding@resend.dev>',
-            to: [ADMIN_EMAIL],
+            to: [RECIPIENT_EMAIL],
+            replyTo: REPLY_TO_EMAIL,
             subject: `💬 Питання з сайту: ${name}`,
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; max-width: 500px;">
