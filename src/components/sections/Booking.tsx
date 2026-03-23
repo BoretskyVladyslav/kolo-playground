@@ -23,7 +23,7 @@ registerLocale('uk', uk);
 const START_HOUR = 11;
 const END_HOUR = 20;
 const MAX_CAPACITY = 15;
-const VISIT_DURATION = 120;
+const VISIT_DURATION = 60;
 const PRICE_PER_PERSON = 400;
 
 type TimeSlot = {
@@ -374,7 +374,7 @@ export const Booking = () => {
                             </div>
                             <div className={styles.infoText}>
                                 <span className={styles.label}>ТРИВАЛІСТЬ</span>
-                                <span className={styles.value}>120 хв</span>
+                                <span className={styles.value}>60 хв</span>
                             </div>
                         </div>
 
@@ -450,7 +450,7 @@ export const Booking = () => {
                                     <div className={styles.booking__notice}>
                                         <AlertCircle className={styles.noticeIcon} size={24} />
                                         <p>
-                                            <strong>Максимум 15 людей одночасно. Всі бронювання на 2 години.</strong> <br />
+                                            <strong>Максимум 15 людей одночасно. Всі бронювання на 1 годину.</strong> <br />
                                             Оберіть місто, кількість гостей та дату, щоб побачити доступні слоти.
                                             Бронювання 30-хвилинними інтервалами з 11:00 до 20:00.
                                         </p>
@@ -506,7 +506,7 @@ export const Booking = () => {
                                                     </div>
                                                     <div className={styles.summaryRow}>
                                                         <span className={styles.labelHighlight}>Тривалість:</span>
-                                                        <span className={styles.valueHighlight}>120 хв</span>
+                                                        <span className={styles.valueHighlight}>60 хв</span>
                                                     </div>
                                                     <div className={styles.summaryRow}>
                                                         <span className={styles.labelHighlight}>До сплати:</span>

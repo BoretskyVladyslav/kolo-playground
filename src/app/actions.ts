@@ -47,7 +47,7 @@ export async function sendBooking(prevState: any, formData: FormData) {
                     
                     <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                         <p style="font-size: 18px; line-height: 1.6;">Привіт, <strong>${name}</strong>! 👋</p>
-                        <p style="font-size: 16px; color: #555;">Ми отримали твою заявку. Твій час майже заброньовано! Найближчим часом ми зателефонуємо для підтвердження.</p>
+                        <p style="font-size: 16px; color: #555;">Ми отримали твою заявку. Твій час майже заброньовано! Неоплачені бронювання видаляються через 24 години.</p>
                         
                         <div style="background-color: #f3f4f6; border-left: 4px solid #ca8a04; padding: 15px; margin: 25px 0; border-radius: 4px;">
                             <p style="margin: 5px 0;">📅 <strong>Дата:</strong> ${date}</p>

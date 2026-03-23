@@ -1,0 +1,23 @@
+.reveal {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+.reveal--visible {
+  opacity: 1;
+  transform: none !important;
+  filter: blur(0) !important;
+}
+.reveal--fade-up {
+  transform: translateY(40px);
+}
+.reveal--slide-in {
+  transform: translateX(-30px);
+}
+.reveal--scale {
+  transform: scale(0.95);
+}
+.reveal--blur {
+  filter: blur(10px);
+  transform: scale(1.05);
+}/*# sourceMappingURL=Reveal.module.css.map */

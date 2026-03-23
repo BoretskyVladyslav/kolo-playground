@@ -139,7 +139,7 @@ export default function AdminPage() {
         try {
             const [h, m] = manualBooking.time.split(':').map(Number);
             const startMinutes = h * 60 + m;
-            const endMinutes = startMinutes + 120;
+            const endMinutes = startMinutes + 60;
             const endH = Math.floor(endMinutes / 60);
             const endM = endMinutes % 60;
             const endTimeStr = `${endH}:${endM === 0 ? '00' : '30'}`;
