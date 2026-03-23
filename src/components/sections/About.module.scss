@@ -7,19 +7,19 @@
 }
 
 .about {
-    position: relative;
+    position: relative; 
     padding: 180px 0;
     background: transparent;
     color: $color-text;
     overflow: hidden;
-
+  
     @include mobile {
         padding: 80px 0;
     }
 
-    &__blur {
-        position: absolute;
-        width: 600px;
+    &__blur { 
+        position: absolute; 
+        width: 600px; 
         height: 600px;
         filter: blur(120px);
         border-radius: 50%;

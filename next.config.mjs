@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: {
@@ -6,6 +8,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  sassOptions: {
+    loadPaths: [path.join(process.cwd(), 'src/styles')],
+  }, 
 };
 
 export default nextConfig;

@@ -21,7 +21,7 @@ declare global {
 registerLocale('uk', uk);
 
 const START_HOUR = 11;
-const END_HOUR = 20;
+const END_HOUR = 21;
 const MAX_CAPACITY = 15;
 const VISIT_DURATION = 60;
 const PRICE_PER_PERSON = 400;
@@ -452,7 +452,7 @@ export const Booking = () => {
                                         <p>
                                             <strong>Максимум 15 людей одночасно. Всі бронювання на 1 годину.</strong> <br />
                                             Оберіть місто, кількість гостей та дату, щоб побачити доступні слоти.
-                                            Бронювання 30-хвилинними інтервалами з 11:00 до 20:00.
+                                            Бронювання 30-хвилинними інтервалами з 11:00 до 21:00.
                                         </p>
                                     </div>
 

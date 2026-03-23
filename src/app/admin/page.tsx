@@ -7,7 +7,7 @@ import styles from './admin.module.scss';
 
 const ADMIN_EMAIL = 'kolo.playground@gmail.com';
 const ADMIN_PASS = 'Koloahmatovoy50';
-
+ 
 interface Booking {
     id: number;
     city_id: number;
@@ -338,7 +338,7 @@ export default function AdminPage() {
                                         value={manualBooking.time}
                                         onChange={e => setManualBooking({...manualBooking, time: e.target.value})}
                                     >
-                                        {['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00'].map(t => (
+                                        {['11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30','21:00'].map(t => (
                                             <option key={t} value={t}>{t}</option>
                                         ))}
                                     </select>
