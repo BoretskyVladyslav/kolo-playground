@@ -10,7 +10,7 @@ Real-time booking system with admin order queue dashboard
 for a children's entertainment venue.
 
 ## Tech Stack
-Next.js (App Router) · TypeScript · Zustand · Framer Motion · Tailwind CSS · Jest
+Next.js (App Router) · TypeScript · Zustand · Framer Motion · Tailwind CSS · Supabase · Jest
 
 ## Key Engineering Decisions
 - Chose Zustand over Context API for booking session state 
